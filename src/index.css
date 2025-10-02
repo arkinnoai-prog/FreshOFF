@@ -146,7 +146,7 @@ h1, h2, h3 {
 }
 
 .text-gradient-gold {
-  background: linear-gradient(135deg, var(--color-gold), var(--color-luxury-gold), var(--color-amber));
+  background: linear-gradient(135deg, var(--color-electric-purple), var(--color-electric-purple), var(--color-electric-purple));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

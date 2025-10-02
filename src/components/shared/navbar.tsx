@@ -54,10 +54,7 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="relative w-12 h-12"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#FF1493] to-[#9D00FF] rounded-full opacity-80 blur-lg group-hover:opacity-100 transition-opacity" />
-              <div className="relative w-full h-full bg-gradient-to-br from-[#FF1493] to-[#9D00FF] rounded-full flex items-center justify-center">
-                <FiShoppingBag className="text-white text-xl" />
-              </div>
+          <img src="/src/assets/logo/logo.png" alt="Logo" className="w-10 h-10 object-cover" />  
             </motion.div>
             <span
               className="text-2xl font-bold text-gradient-gold"

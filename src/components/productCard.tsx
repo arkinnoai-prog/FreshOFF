@@ -1,17 +1,18 @@
 // src/components/ProductCard.tsx - Updated with new theme
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiHeart, FiShoppingCart, FiEye, FiStar } from "react-icons/fi";
 import { useCart } from "../context/cartContext";
 import type { Product } from "../types";
 import { useWishlist } from "../context/wishlistContext";
-
+import type { nav } from "framer-motion/client";
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
@@ -25,7 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <motion.div whileHover={{ y: -5 }} className="card-modern group relative">
-      <div className="relative">
+      <div className="relative" onClick={() => navigate(`/product/${product.id}`)}>
         <div className="aspect-square overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#150027] to-[#1a0033]">
           <img
             src={product.images[0]}
@@ -33,7 +34,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
 
-          {/* Overlay on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#150027]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           {product.originalPrice && (
