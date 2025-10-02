@@ -68,8 +68,8 @@ export const products: Product[] = [
     price: 449,
     originalPrice: 599,
     images: [
-      "https://images.unsplash.com/photo-1548637724-2b28dc196569?w=800",
-      "https://images.unsplash.com/photo-1585488802494-8b9050f5bd87?w=800",
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800",
+      "https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=800",
     ],
     category: "Satchels",
     description:
