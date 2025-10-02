@@ -190,6 +190,9 @@ h1, h2, h3 {
   background-size: 50px 50px;
   animation: cyber-scan 20s linear infinite;
 }
+.cyber-grid-static {
+  animation: none;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {

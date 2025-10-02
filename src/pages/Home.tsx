@@ -99,10 +99,10 @@ const HomePage = () => {
       />
 
       {/* Hero Section - Fixed positioning */}
-      <section className="relative h-screen overflow-hidden cyber-grid">
+      <section className="relative h-screen overflow-hidden cyber-grid cyber-grid-static">
         {/* Scanning Line Effect */}
         <div className="absolute inset-0 pointer-events-none z-40">
-          <div className="absolute w-full h-1 bg-gradient-to-r from-transparent via-neon-pink to-transparent opacity-50 animate-cyber-scan" />
+          <div className="absolute w-full h-1 bg-gradient-to-r from-transparent via-neon-pink to-transparent opacity-50" />
         </div>
 
         {/* Hero Slides Container - Fixed to prevent movement */}
