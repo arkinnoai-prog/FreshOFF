@@ -23,7 +23,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div>
             <h3 className="font-audiowide text-3xl text-gradient-cyber mb-4">
-              LUXE.CYBER
+              FRESHOFF
             </h3>
             <p className="text-gray-500 mb-6 font-rajdhani">
               Next-gen fashion for the digital revolution. Step into the future.
@@ -146,7 +146,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="border-t border-neon-pink/20 pt-8 text-center">
           <p className="text-gray-600 font-share-tech">
-            © 2024 LUXE.CYBER | All systems operational | Made with
+            © 2024 FRESHOFF| All systems operational | Made with
             <span className="text-neon-pink animate-pulse mx-1">♥</span>
             in the Metaverse
           </p>

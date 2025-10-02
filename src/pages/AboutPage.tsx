@@ -49,7 +49,7 @@ const AboutPage = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gradient-cyber">
-              ABOUT LUXE.CYBER
+              ABOUT FRESHOFF
             </h1>
             <p
               className="text-xl text-gray-400 mb-8"
@@ -76,7 +76,7 @@ const AboutPage = () => {
               </h2>
               <div className="space-y-4 text-gray-400">
                 <p>
-                  Founded in 2020 in the heart of Neo Tokyo, LUXE.CYBER emerged
+                  Founded in 2020 in the heart of Neo Tokyo, FRESHOFF emerged
                   from a simple vision: to create bags that don't just carry
                   your essentials, but enhance your digital lifestyle.
                 </p>

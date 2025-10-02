@@ -1,4 +1,4 @@
-// src/components/Navbar.tsx
+// src/components/Navbar.tsx - Updated with new theme
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,7 +41,7 @@ const Navbar = () => {
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-cyber-black/95 backdrop-blur-xl border-b border-neon-pink/20 py-4"
+          ? "bg-[#150027]/95 backdrop-blur-xl border-b border-white/10 py-4"
           : "bg-transparent py-6"
       }`}
     >
@@ -54,16 +54,16 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="relative w-12 h-12"
             >
-              <div className="absolute inset-0 bg-neon-pink rounded-lg opacity-20 blur-xl group-hover:opacity-40 transition-opacity" />
-              <div className="relative w-full h-full bg-gradient-to-br from-neon-pink to-electric-purple rounded-lg flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF1493] to-[#9D00FF] rounded-full opacity-80 blur-lg group-hover:opacity-100 transition-opacity" />
+              <div className="relative w-full h-full bg-gradient-to-br from-[#FF1493] to-[#9D00FF] rounded-full flex items-center justify-center">
                 <FiShoppingBag className="text-white text-xl" />
               </div>
             </motion.div>
             <span
-              className="font-audiowide text-2xl text-gradient-cyber glitch"
-              data-text="LUXE.CYBER"
+              className="text-2xl font-bold text-gradient-gold"
+              style={{ fontFamily: "var(--font-family-bebas)" }}
             >
-              LUXE.CYBER
+              FRESHOFF
             </span>
           </Link>
 
@@ -72,25 +72,21 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <Link key={link.path} to={link.path} className="relative group">
                 <span
-                  className={`font-orbitron font-medium uppercase tracking-wider transition-all duration-300 ${
+                  className={`font-medium uppercase tracking-wider transition-all duration-300 ${
                     location.pathname === link.path
-                      ? "text-neon-pink"
-                      : "text-gray-400 hover:text-neon-pink"
+                      ? "text-[#FF1493]"
+                      : "text-gray-300 hover:text-white"
                   }`}
+                  style={{ fontFamily: "var(--font-family-space)" }}
                 >
                   {link.label}
                 </span>
                 {location.pathname === link.path && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute -bottom-2 left-0 right-0 h-0.5 bg-neon-pink"
-                    style={{ boxShadow: "0 0 10px #ff006e" }}
+                    className="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FF1493] to-[#00E5FF]"
                   />
                 )}
-                <span
-                  className="absolute -bottom-2 left-0 right-0 h-0.5 bg-neon-pink opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ boxShadow: "0 0 10px #ff006e" }}
-                />
               </Link>
             ))}
           </div>
@@ -100,25 +96,25 @@ const Navbar = () => {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 text-gray-400 hover:text-neon-pink transition-colors hover:bg-neon-pink/10 rounded-lg"
+              className="p-2 text-gray-300 hover:text-[#00E5FF] transition-colors"
             >
               <FiSearch className="text-xl" />
             </motion.button>
 
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="p-2 text-gray-400 hover:text-neon-pink transition-colors hover:bg-neon-pink/10 rounded-lg"
+              className="p-2 text-gray-300 hover:text-[#00E5FF] transition-colors"
             >
               <FiUser className="text-xl" />
             </motion.button>
 
             <Link
               to="/wishlist"
-              className="relative p-2 text-gray-400 hover:text-neon-pink transition-colors hover:bg-neon-pink/10 rounded-lg"
+              className="relative p-2 text-gray-300 hover:text-[#FF1493] transition-colors"
             >
               <FiHeart className="text-xl" />
               {wishlist.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-neon-pink text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[#FF1493] to-[#E91E63] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
                   {wishlist.length}
                 </span>
               )}
@@ -126,11 +122,11 @@ const Navbar = () => {
 
             <Link
               to="/cart"
-              className="relative p-2 text-gray-400 hover:text-neon-pink transition-colors hover:bg-neon-pink/10 rounded-lg"
+              className="relative p-2 text-gray-300 hover:text-[#39FF14] transition-colors"
             >
               <FiShoppingBag className="text-xl" />
               {getCartCount() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-neon-pink text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[#39FF14] to-[#00FF00] text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {getCartCount()}
                 </span>
               )}
@@ -139,7 +135,7 @@ const Navbar = () => {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 text-gray-400 hover:text-neon-pink transition-colors"
+              className="lg:hidden p-2 text-gray-300 hover:text-white transition-colors"
             >
               {isOpen ? (
                 <FiX className="text-xl" />
@@ -162,10 +158,10 @@ const Navbar = () => {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search for cyberpunk bags..."
-                  className="input-cyber w-full"
+                  placeholder="Search for luxury bags..."
+                  className="input-modern pr-12"
                 />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-neon-pink to-electric-purple text-white p-2 rounded-lg hover:shadow-lg hover:shadow-neon-pink/50 transition-all">
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-gradient-to-r from-[#FF1493] to-[#9D00FF] text-white rounded-lg hover:shadow-lg hover:shadow-[#FF1493]/30 transition-all">
                   <FiSearch />
                 </button>
               </div>
@@ -182,16 +178,16 @@ const Navbar = () => {
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden mt-4"
             >
-              <div className="card-cyber p-4">
+              <div className="glass-effect rounded-2xl p-4">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
                     onClick={() => setIsOpen(false)}
-                    className={`block font-orbitron py-3 px-4 rounded-lg transition-all ${
+                    className={`block py-3 px-4 rounded-lg transition-all ${
                       location.pathname === link.path
-                        ? "bg-neon-pink/20 text-neon-pink"
-                        : "text-gray-400 hover:bg-neon-pink/10 hover:text-neon-pink"
+                        ? "bg-gradient-to-r from-[#FF1493]/20 to-[#9D00FF]/20 text-[#FF1493]"
+                        : "text-gray-300 hover:bg-white/5 hover:text-white"
                     }`}
                   >
                     {link.label}
