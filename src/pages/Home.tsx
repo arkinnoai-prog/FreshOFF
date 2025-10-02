@@ -1,4 +1,3 @@
-// src/pages/HomePage.tsx - Updated with video background and new theme
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {

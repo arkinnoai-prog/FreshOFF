@@ -1,65 +1,169 @@
-// src/pages/AboutPage.tsx
 import { motion } from "framer-motion";
-import { FiAward, FiUsers, FiTruck, FiHeart } from "react-icons/fi";
+import {
+  FiAward,
+  FiUsers,
+  FiTruck,
+  FiHeart,
+  FiTarget,
+  FiTrendingUp,
+  FiGlobe,
+  FiZap,
+} from "react-icons/fi";
 
 const AboutPage = () => {
   const stats = [
-    { icon: FiUsers, value: "50K+", label: "Happy Customers" },
-    { icon: FiAward, value: "15+", label: "Awards Won" },
-    { icon: FiTruck, value: "100K+", label: "Orders Delivered" },
-    { icon: FiHeart, value: "99%", label: "Satisfaction Rate" },
+    {
+      icon: FiUsers,
+      value: "100K+",
+      label: "Happy Customers",
+      color: "#FF1493",
+    },
+    { icon: FiAward, value: "25+", label: "Awards Won", color: "#FFD700" },
+    {
+      icon: FiTruck,
+      value: "500K+",
+      label: "Orders Delivered",
+      color: "#39FF14",
+    },
+    {
+      icon: FiHeart,
+      value: "99.9%",
+      label: "Satisfaction Rate",
+      color: "#00E5FF",
+    },
   ];
 
   const team = [
     {
-      name: "Sarah Chen",
+      name: "Alexandra Chen",
       role: "Founder & CEO",
       image:
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
-      bio: "Visionary leader with 15 years in fashion tech",
+      bio: "Visionary leader with 20 years in luxury fashion",
+      gradient: "from-[#FF1493] to-[#9D00FF]",
     },
     {
-      name: "Alex Rivera",
-      role: "Head of Design",
+      name: "Marcus Rivera",
+      role: "Creative Director",
       image:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
-      bio: "Award-winning designer from Milan",
+      bio: "Award-winning designer from Paris Fashion Week",
+      gradient: "from-[#00E5FF] to-[#39FF14]",
     },
     {
-      name: "Maya Patel",
-      role: "Tech Director",
+      name: "Priya Sharma",
+      role: "Head of Innovation",
       image:
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
-      bio: "Pioneering smart fashion integration",
+      bio: "Tech pioneer revolutionizing fashion retail",
+      gradient: "from-[#FFD700] to-[#FF6600]",
+    },
+  ];
+
+  const values = [
+    {
+      icon: FiTarget,
+      title: "Our Mission",
+      desc: "To redefine luxury fashion with innovative designs that empower modern individuals.",
+    },
+    {
+      icon: FiTrendingUp,
+      title: "Our Vision",
+      desc: "Becoming the global leader in sustainable luxury accessories by 2030.",
+    },
+    {
+      icon: FiGlobe,
+      title: "Our Reach",
+      desc: "Serving fashion enthusiasts in over 50 countries worldwide.",
+    },
+    {
+      icon: FiZap,
+      title: "Our Innovation",
+      desc: "Integrating cutting-edge technology with timeless craftsmanship.",
     },
   ];
 
   return (
-    <div
-      className="pt-24 pb-20 min-h-screen"
-      style={{ background: "var(--color-cyber-black)" }}
-    >
+    <div className="pt-24 pb-20 min-h-screen bg-[#150027]">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20">
-        <div className="absolute inset-0 cyber-grid opacity-20" />
+        <div className="absolute inset-0 neon-grid opacity-20" />
         <div className="container mx-auto px-4 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-4xl mx-auto"
+            className="text-center max-w-5xl mx-auto"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gradient-cyber">
-              ABOUT FRESHOFF
+            <h1
+              className="text-6xl md:text-8xl font-bold mb-6 text-gradient-neon"
+              style={{ fontFamily: "var(--font-family-bebas)" }}
+            >
+              THE FRESHOFF STORY
             </h1>
             <p
-              className="text-xl text-gray-400 mb-8"
-              style={{ fontFamily: "var(--font-family-rajdhani)" }}
+              className="text-xl text-gray-300 mb-8 leading-relaxed"
+              style={{ fontFamily: "var(--font-family-montserrat)" }}
             >
-              Where cutting-edge technology meets timeless elegance. We're
-              redefining fashion for the digital age with smart, sustainable,
-              and stunning accessories.
+              Born from a passion for exceptional design and a commitment to
+              sustainability, FreshOff is more than a brand – it's a movement
+              towards conscious luxury.
             </p>
+            <div className="inline-flex gap-4">
+              <motion.div
+                className="px-6 py-2 bg-gradient-to-r from-[#FF1493]/20 to-[#9D00FF]/20 rounded-full border border-[#FF1493]/30"
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className="text-[#FF1493] font-semibold">Est. 2020</span>
+              </motion.div>
+              <motion.div
+                className="px-6 py-2 bg-gradient-to-r from-[#39FF14]/20 to-[#00E5FF]/20 rounded-full border border-[#39FF14]/30"
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className="text-[#39FF14] font-semibold">
+                  Premium Quality
+                </span>
+              </motion.div>
+            </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FF1493]/5 via-transparent to-[#00E5FF]/5" />
+        <div className="container mx-auto px-4 relative">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div
+                  className="w-20 h-20 mx-auto mb-4 rounded-2xl flex items-center justify-center"
+                  style={{
+                    background: `linear-gradient(135deg, ${stat.color}20, ${stat.color}10)`,
+                    border: `2px solid ${stat.color}40`,
+                  }}
+                >
+                  <stat.icon
+                    className="text-3xl"
+                    style={{ color: stat.color }}
+                  />
+                </div>
+                <div
+                  className="text-4xl font-bold mb-2"
+                  style={{ color: stat.color }}
+                >
+                  {stat.value}
+                </div>
+                <div className="text-gray-400">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -70,70 +174,84 @@ const AboutPage = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
             >
-              <h2 className="text-4xl font-bold mb-6 text-gradient-cyber">
-                OUR STORY
+              <h2
+                className="text-5xl font-bold mb-6 text-gradient-gold"
+                style={{ fontFamily: "var(--font-family-bebas)" }}
+              >
+                CRAFTING EXCELLENCE SINCE DAY ONE
               </h2>
-              <div className="space-y-4 text-gray-400">
+              <div className="space-y-4 text-gray-300">
                 <p>
-                  Founded in 2020 in the heart of Neo Tokyo, FRESHOFF emerged
-                  from a simple vision: to create bags that don't just carry
-                  your essentials, but enhance your digital lifestyle.
+                  FreshOff began in a small studio with a big dream: to create
+                  bags that don't just carry your essentials, but elevate your
+                  entire lifestyle. Our founders saw a gap in the market for
+                  truly innovative, sustainable luxury accessories.
                 </p>
                 <p>
-                  Our founders, a team of fashion designers and tech innovators,
-                  saw a gap in the market for accessories that could seamlessly
-                  integrate with our increasingly connected world.
+                  Today, we've grown into a global brand, but our core values
+                  remain unchanged. Every FreshOff bag is a testament to our
+                  commitment to quality, innovation, and environmental
+                  responsibility.
                 </p>
                 <p>
-                  Today, we're proud to offer a collection that features
-                  built-in wireless charging, RFID protection, smart tracking,
-                  and sustainable materials - all wrapped in stunning cyberpunk
-                  aesthetics.
+                  From ethically sourced materials to carbon-neutral shipping,
+                  we're proving that luxury and sustainability can coexist
+                  beautifully.
                 </p>
               </div>
+              <button className="btn-neon mt-6">
+                Learn More About Our Process
+              </button>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
               className="relative"
             >
-              <div className="card-cyber p-4">
+              <div className="card-modern p-4">
                 <img
                   src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600"
                   alt="Our workshop"
-                  className="w-full h-[400px] object-cover rounded"
-                  style={{
-                    filter: "hue-rotate(280deg) saturate(1.5) brightness(0.8)",
-                  }}
+                  className="w-full h-[500px] object-cover rounded-xl"
                 />
               </div>
-              <div className="absolute -top-4 -right-4 w-32 h-32 bg-[var(--color-neon-pink)]/20 rounded-full blur-3xl" />
+              <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-[#FF1493]/30 to-[#9D00FF]/30 rounded-full blur-3xl" />
+              <div className="absolute -bottom-4 -left-4 w-40 h-40 bg-gradient-to-br from-[#39FF14]/30 to-[#00E5FF]/30 rounded-full blur-3xl" />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-neon-pink)]/10 via-transparent to-[var(--color-electric-purple)]/10" />
-        <div className="container mx-auto px-4 relative">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+      {/* Values Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl font-bold text-center mb-12 text-gradient-neon"
+            style={{ fontFamily: "var(--font-family-bebas)" }}
+          >
+            WHAT DRIVES US
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="text-center"
+                viewport={{ once: true }}
+                className="card-modern p-6 hover:scale-105 transition-transform"
               >
-                <div className="w-20 h-20 mx-auto mb-4 bg-[var(--color-cyber-gray)] rounded-lg flex items-center justify-center border border-[var(--color-neon-pink)]/30">
-                  <stat.icon className="text-3xl text-[var(--color-neon-pink)]" />
-                </div>
-                <div className="text-3xl font-bold text-gradient-cyber mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-gray-500">{stat.label}</div>
+                <value.icon className="text-3xl text-[#00E5FF] mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-white">
+                  {value.title}
+                </h3>
+                <p className="text-gray-400 text-sm">{value.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -146,9 +264,11 @@ const AboutPage = () => {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-center mb-12 text-gradient-cyber"
+            viewport={{ once: true }}
+            className="text-5xl font-bold text-center mb-12 text-gradient-gold"
+            style={{ fontFamily: "var(--font-family-bebas)" }}
           >
-            MEET THE TEAM
+            MEET THE VISIONARIES
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.map((member, index) => (
@@ -157,43 +277,59 @@ const AboutPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="card-cyber p-6 text-center group"
+                viewport={{ once: true }}
+                className="card-modern p-8 text-center group hover:scale-105 transition-transform"
               >
-                <div className="relative w-32 h-32 mx-auto mb-4">
+                <div className="relative w-40 h-40 mx-auto mb-6">
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${member.gradient} rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity`}
+                  />
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover rounded-full"
-                    style={{ filter: "grayscale(100%) contrast(1.2)" }}
+                    className="relative w-full h-full object-cover rounded-full border-4 border-white/10"
                   />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-neon-pink)]/20 to-[var(--color-electric-purple)]/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="text-xl font-bold mb-1 text-[var(--color-neon-pink)]">
+                <h3
+                  className={`text-2xl font-bold mb-2 bg-gradient-to-r ${member.gradient} bg-clip-text text-transparent`}
+                >
                   {member.name}
                 </h3>
-                <p className="text-gray-400 mb-3">{member.role}</p>
-                <p className="text-sm text-gray-500">{member.bio}</p>
+                <p className="text-[#00E5FF] mb-3 font-semibold">
+                  {member.role}
+                </p>
+                <p className="text-gray-400 text-sm">{member.bio}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Mission Section */}
+      {/* CTA Section */}
       <section className="py-20 relative">
-        <div className="absolute inset-0 cyber-grid opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FF1493]/10 via-[#9D00FF]/10 to-[#00E5FF]/10" />
         <div className="container mx-auto px-4 relative">
-          <div className="card-cyber p-12 text-center max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold mb-6 text-gradient-cyber">
-              OUR MISSION
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="card-modern p-12 text-center max-w-3xl mx-auto"
+          >
+            <h2
+              className="text-5xl font-bold mb-6 text-gradient-neon"
+              style={{ fontFamily: "var(--font-family-bebas)" }}
+            >
+              JOIN THE FRESHOFF FAMILY
             </h2>
-            <p className="text-xl text-gray-400 mb-8">
-              To create innovative accessories that empower the modern digital
-              nomad, combining cutting-edge technology with sustainable
-              practices and timeless design.
+            <p className="text-xl text-gray-300 mb-8">
+              Be part of a community that values quality, innovation, and
+              conscious luxury.
             </p>
-            <button className="btn-cyber">JOIN OUR JOURNEY</button>
-          </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="btn-neon">SHOP NOW</button>
+              <button className="btn-outline-neon">BECOME A MEMBER</button>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>

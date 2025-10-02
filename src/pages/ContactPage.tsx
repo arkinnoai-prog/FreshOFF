@@ -1,7 +1,14 @@
-// src/pages/ContactPage.tsx
+// src/pages/ContactPage.tsx - Updated with new theme
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FiMail, FiPhone, FiMapPin, FiSend } from "react-icons/fi";
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiSend,
+  FiClock,
+  FiMessageCircle,
+} from "react-icons/fi";
 import toast from "react-hot-toast";
 
 const ContactPage = () => {
@@ -14,32 +21,70 @@ const ContactPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message sent! We'll get back to you soon.");
+    toast.success("Message sent! We'll get back to you within 24 hours.");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const contactInfo = [
+    {
+      icon: FiMapPin,
+      title: "Visit Our Store",
+      details: ["123 Fashion Avenue", "New York, NY 10001", "United States"],
+      color: "#FF1493",
+    },
+    {
+      icon: FiPhone,
+      title: "Call Us",
+      details: ["+1 (555) 123-4567", "Mon-Fri 9AM-6PM EST", "Sat 10AM-4PM EST"],
+      color: "#39FF14",
+    },
+    {
+      icon: FiMail,
+      title: "Email Us",
+      details: [
+        "support@freshoff.com",
+        "wholesale@freshoff.com",
+        "press@freshoff.com",
+      ],
+      color: "#00E5FF",
+    },
+    {
+      icon: FiClock,
+      title: "Business Hours",
+      details: [
+        "Monday - Friday: 9AM - 6PM",
+        "Saturday: 10AM - 4PM",
+        "Sunday: Closed",
+      ],
+      color: "#FFD700",
+    },
+  ];
+
   return (
-    <div
-      className="pt-24 pb-20 min-h-screen"
-      style={{ background: "var(--color-cyber-black)" }}
-    >
+    <div className="pt-24 pb-20 min-h-screen bg-[#150027]">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-gradient-cyber">
-            CONTACT US
+          <h1
+            className="text-6xl md:text-7xl font-bold mb-4 text-gradient-neon"
+            style={{ fontFamily: "var(--font-family-bebas)" }}
+          >
+            GET IN TOUCH
           </h1>
-          <p className="text-xl text-gray-400">
-            Get in touch with our cyber support team
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            We'd love to hear from you. Send us a message and we'll respond as
+            soon as possible.
           </p>
         </motion.div>
 
@@ -49,9 +94,10 @@ const ContactPage = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <form onSubmit={handleSubmit} className="card-cyber p-8">
-              <h2 className="text-2xl font-bold mb-6 text-[var(--color-neon-pink)]">
-                Send us a Message
+            <form onSubmit={handleSubmit} className="card-modern p-8">
+              <h2 className="text-3xl font-bold mb-6 text-gradient-gold flex items-center gap-2">
+                <FiMessageCircle />
+                Send Message
               </h2>
               <div className="space-y-4">
                 <input
@@ -60,7 +106,7 @@ const ContactPage = () => {
                   placeholder="Your Name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="input-cyber w-full"
+                  className="input-modern w-full"
                   required
                 />
                 <input
@@ -69,31 +115,46 @@ const ContactPage = () => {
                   placeholder="Your Email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="input-cyber w-full"
+                  className="input-modern w-full"
                   required
                 />
-                <input
-                  type="text"
+                <select
                   name="subject"
-                  placeholder="Subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className="input-cyber w-full"
+                  className="input-modern w-full"
                   required
-                />
+                  style={{ background: "rgba(21, 0, 39, 0.6)" }}
+                >
+                  <option value="" style={{ background: "#150027" }}>
+                    Select Subject
+                  </option>
+                  <option value="general" style={{ background: "#150027" }}>
+                    General Inquiry
+                  </option>
+                  <option value="order" style={{ background: "#150027" }}>
+                    Order Support
+                  </option>
+                  <option value="wholesale" style={{ background: "#150027" }}>
+                    Wholesale
+                  </option>
+                  <option value="press" style={{ background: "#150027" }}>
+                    Press & Media
+                  </option>
+                </select>
                 <textarea
                   name="message"
                   placeholder="Your Message"
                   value={formData.message}
                   onChange={handleChange}
                   rows={6}
-                  className="input-cyber w-full resize-none"
+                  className="input-modern w-full resize-none"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="btn-cyber mt-6 flex items-center gap-2"
+                className="btn-neon mt-6 w-full flex items-center justify-center gap-2"
               >
                 <FiSend />
                 SEND MESSAGE
@@ -107,64 +168,60 @@ const ContactPage = () => {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
-            <div className="card-cyber p-8">
-              <h2 className="text-2xl font-bold mb-6 text-[var(--color-neon-pink)]">
-                Get in Touch
-              </h2>
-              <div className="space-y-6">
+            {contactInfo.map((info, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="card-modern p-6 hover:scale-105 transition-transform"
+              >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[var(--color-cyber-gray)] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FiMapPin className="text-[var(--color-neon-pink)]" />
+                  <div
+                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${info.color}20, ${info.color}10)`,
+                      border: `2px solid ${info.color}40`,
+                    }}
+                  >
+                    <info.icon
+                      className="text-xl"
+                      style={{ color: info.color }}
+                    />
                   </div>
                   <div>
-                    <h3 className="font-bold mb-1">Visit Us</h3>
-                    <p className="text-gray-400">
-                      123 Cyber Street, Neo Tokyo
-                      <br />
-                      Digital District, NT 10001
-                    </p>
+                    <h3 className="font-bold text-lg mb-2 text-white">
+                      {info.title}
+                    </h3>
+                    {info.details.map((detail, idx) => (
+                      <p key={idx} className="text-gray-400 text-sm">
+                        {detail}
+                      </p>
+                    ))}
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[var(--color-cyber-gray)] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FiPhone className="text-[var(--color-neon-pink)]" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-1">Call Us</h3>
-                    <p className="text-gray-400">
-                      +1 (555) CYBER-01
-                      <br />
-                      Mon-Fri 9AM-6PM EST
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[var(--color-cyber-gray)] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FiMail className="text-[var(--color-neon-pink)]" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-1">Email Us</h3>
-                    <p className="text-gray-400">
-                      support@luxecyber.io
-                      <br />
-                      business@luxecyber.io
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Map placeholder */}
-            <div className="card-cyber p-4 h-64 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[var(--color-cyber-gray)] rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FiMapPin className="text-3xl text-[var(--color-neon-pink)]" />
-                </div>
-                <p className="text-gray-500">Interactive Map Coming Soon</p>
-              </div>
-            </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
+
+        {/* Map Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-20 card-modern p-8 text-center"
+        >
+          <h2 className="text-3xl font-bold mb-6 text-gradient-neon">
+            FIND US
+          </h2>
+          <div className="h-96 bg-gradient-to-br from-[#150027] to-[#1a0033] rounded-xl flex items-center justify-center">
+            <div>
+              <FiMapPin className="text-6xl text-[#FF1493] mx-auto mb-4" />
+              <p className="text-gray-400">Interactive map coming soon</p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

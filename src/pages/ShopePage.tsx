@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FiFilter, FiGrid, FiList, FiSearch } from "react-icons/fi";
+import { FiFilter, FiGrid, FiList, FiSearch, FiX } from "react-icons/fi";
 import { products } from "../data/product";
 import ProductCard from "../components/productCard";
+
 
 const ShopPage = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -53,25 +54,28 @@ const ShopPage = () => {
   });
 
   return (
-    <div
-      className="pt-24 pb-20 min-h-screen"
-      style={{ background: "var(--color-cyber-black)" }}
-    >
-      <div className="container mx-auto px-4">
+    <div className="pt-24 pb-20 min-h-screen bg-[#150027]">
+      {/* Background Effect */}
+      <div className="fixed inset-0 neon-grid opacity-10" />
+
+      <div className="container mx-auto px-4 relative">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-gradient-cyber">
-            CYBER SHOP
+          <h1
+            className="text-6xl md:text-7xl font-bold mb-4 text-gradient-neon"
+            style={{ fontFamily: "var(--font-family-bebas)" }}
+          >
+            SHOP COLLECTION
           </h1>
           <p
             className="text-gray-400 text-lg"
-            style={{ fontFamily: "var(--font-family-share-tech)" }}
+            style={{ fontFamily: "var(--font-family-montserrat)" }}
           >
-            {filteredProducts.length} Products Available
+            {filteredProducts.length} Premium Products Available
           </p>
         </motion.div>
 
@@ -80,7 +84,7 @@ const ShopPage = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="btn-cyber flex items-center gap-2"
+              className="btn-outline-neon flex items-center gap-2 py-2 px-4 text-sm"
             >
               <FiFilter />
               Filters
@@ -88,20 +92,20 @@ const ShopPage = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-2 rounded border ${
+                className={`p-3 rounded-lg border-2 transition-all ${
                   viewMode === "grid"
-                    ? "border-[var(--color-neon-pink)] text-[var(--color-neon-pink)]"
-                    : "border-gray-600 text-gray-400"
+                    ? "border-[#39FF14] text-[#39FF14] bg-[#39FF14]/10"
+                    : "border-gray-600 text-gray-400 hover:border-gray-400"
                 }`}
               >
                 <FiGrid />
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-2 rounded border ${
+                className={`p-3 rounded-lg border-2 transition-all ${
                   viewMode === "list"
-                    ? "border-[var(--color-neon-pink)] text-[var(--color-neon-pink)]"
-                    : "border-gray-600 text-gray-400"
+                    ? "border-[#39FF14] text-[#39FF14] bg-[#39FF14]/10"
+                    : "border-gray-600 text-gray-400 hover:border-gray-400"
                 }`}
               >
                 <FiList />
@@ -116,17 +120,23 @@ const ShopPage = () => {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="input-cyber pr-10"
+                className="input-modern pl-4 pr-10 py-2 text-sm"
+                style={{ minWidth: "250px" }}
               />
               <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
             </div>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="input-cyber"
+              className="input-modern py-2 px-4 text-sm"
+              style={{ background: "rgba(21, 0, 39, 0.6)" }}
             >
               {sortOptions.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option
+                  key={option.value}
+                  value={option.value}
+                  style={{ background: "#150027" }}
+                >
                   {option.label}
                 </option>
               ))}
@@ -140,24 +150,27 @@ const ShopPage = () => {
             <motion.aside
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="w-64 flex-shrink-0"
+              className="w-72 flex-shrink-0"
             >
-              <div className="card-cyber p-6 sticky top-24">
-                <h3 className="text-xl font-bold mb-6 text-[var(--color-neon-pink)]">
+              <div className="card-modern p-6 sticky top-24">
+                <h3
+                  className="text-2xl font-bold mb-6 text-gradient-gold"
+                  style={{ fontFamily: "var(--font-family-bebas)" }}
+                >
                   FILTERS
                 </h3>
 
                 {/* Categories */}
-                <div className="mb-6">
-                  <h4 className="font-bold mb-3 text-gray-300">Categories</h4>
+                <div className="mb-8">
+                  <h4 className="font-semibold mb-4 text-white">Categories</h4>
                   {categories.map((category) => (
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`block w-full text-left py-2 px-3 rounded mb-1 transition-all ${
+                      className={`block w-full text-left py-3 px-4 rounded-lg mb-2 transition-all ${
                         selectedCategory === category
-                          ? "bg-[var(--color-neon-pink)]/20 text-[var(--color-neon-pink)] border-l-2 border-[var(--color-neon-pink)]"
-                          : "text-gray-400 hover:text-[var(--color-neon-pink)] hover:bg-[var(--color-neon-pink)]/10"
+                          ? "bg-gradient-to-r from-[#FF1493]/20 to-[#9D00FF]/20 text-[#FF1493] border-l-4 border-[#FF1493]"
+                          : "text-gray-400 hover:text-white hover:bg-white/5"
                       }`}
                     >
                       {category}
@@ -166,9 +179,9 @@ const ShopPage = () => {
                 </div>
 
                 {/* Price Range */}
-                <div className="mb-6">
-                  <h4 className="font-bold mb-3 text-gray-300">Price Range</h4>
-                  <div className="space-y-2">
+                <div className="mb-8">
+                  <h4 className="font-semibold mb-4 text-white">Price Range</h4>
+                  <div className="space-y-4">
                     <input
                       type="range"
                       min="0"
@@ -177,34 +190,50 @@ const ShopPage = () => {
                       onChange={(e) =>
                         setPriceRange([priceRange[0], parseInt(e.target.value)])
                       }
-                      className="w-full"
-                      style={{
-                        background: `linear-gradient(to right, var(--color-neon-pink) 0%, var(--color-neon-pink) ${
-                          priceRange[1] / 10
-                        }%, var(--color-cyber-gray) ${
-                          priceRange[1] / 10
-                        }%, var(--color-cyber-gray) 100%)`,
-                      }}
+                      className="w-full accent-[#39FF14]"
                     />
-                    <div className="flex justify-between text-sm text-gray-400">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">${priceRange[0]}</span>
+                      <span className="text-[#39FF14] font-bold">
+                        ${priceRange[1]}
+                      </span>
                     </div>
+                  </div>
+                </div>
+
+                {/* Colors */}
+                <div className="mb-8">
+                  <h4 className="font-semibold mb-4 text-white">Colors</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {["Pink", "Blue", "Green", "Gold", "Black", "White"].map(
+                      (color) => (
+                        <button
+                          key={color}
+                          className="px-4 py-2 text-xs border border-[#00E5FF]/30 rounded-full text-[#00E5FF] hover:bg-[#00E5FF]/20 transition-all"
+                        >
+                          {color}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
 
                 {/* Tags */}
                 <div>
-                  <h4 className="font-bold mb-3 text-gray-300">Tags</h4>
+                  <h4 className="font-semibold mb-4 text-white">
+                    Popular Tags
+                  </h4>
                   <div className="flex flex-wrap gap-2">
-                    {["New", "Sale", "Limited", "Trending"].map((tag) => (
-                      <button
-                        key={tag}
-                        className="px-3 py-1 text-xs border border-[var(--color-neon-pink)]/30 rounded text-[var(--color-neon-pink)] hover:bg-[var(--color-neon-pink)]/20 transition-all"
-                      >
-                        {tag}
-                      </button>
-                    ))}
+                    {["New", "Sale", "Limited", "Trending", "Premium"].map(
+                      (tag) => (
+                        <button
+                          key={tag}
+                          className="px-3 py-1 text-xs bg-gradient-to-r from-[#39FF14]/10 to-[#00E5FF]/10 border border-[#39FF14]/30 rounded-full text-[#39FF14] hover:bg-[#39FF14]/20 transition-all"
+                        >
+                          {tag}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -234,8 +263,17 @@ const ShopPage = () => {
 
             {sortedProducts.length === 0 && (
               <div className="text-center py-20">
-                <p className="text-2xl text-gray-500">No products found</p>
-                <p className="text-gray-600 mt-2">Try adjusting your filters</p>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="inline-block"
+                >
+                  <FiX className="text-6xl text-gray-600 mx-auto mb-4" />
+                  <p className="text-2xl text-gray-400 mb-2">
+                    No products found
+                  </p>
+                  <p className="text-gray-500">Try adjusting your filters</p>
+                </motion.div>
               </div>
             )}
           </div>

@@ -1,4 +1,3 @@
-// src/pages/ProductDetailPage.tsx
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -28,15 +27,16 @@ const ProductDetailPage = () => {
     product?.colors?.[0] || ""
   );
   const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState("description");
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[#150027]">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[var(--color-neon-pink)] mb-4">
+          <h2 className="text-4xl font-bold text-[#FF1493] mb-4">
             Product Not Found
           </h2>
-          <button onClick={() => navigate("/shop")} className="btn-cyber">
+          <button onClick={() => navigate("/shop")} className="btn-neon">
             Back to Shop
           </button>
         </div>
@@ -61,10 +61,7 @@ const ProductDetailPage = () => {
     .slice(0, 3);
 
   return (
-    <div
-      className="pt-24 pb-20 min-h-screen"
-      style={{ background: "var(--color-cyber-black)" }}
-    >
+    <div className="pt-24 pb-20 min-h-screen bg-[#150027]">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Gallery */}
@@ -72,31 +69,34 @@ const ProductDetailPage = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <div className="card-cyber p-4 mb-4">
-              <img
-                src={product.images[selectedImage]}
-                alt={product.name}
-                className="w-full h-[500px] object-cover rounded"
-                style={{ filter: "brightness(0.9) contrast(1.1)" }}
-              />
+            <div className="card-modern p-4 mb-4">
+              <div className="aspect-square overflow-hidden rounded-xl">
+                <img
+                  src={product.images[selectedImage]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
             <div className="grid grid-cols-4 gap-4">
               {product.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`card-cyber p-2 ${
+                  className={`relative overflow-hidden rounded-lg border-2 transition-all ${
                     selectedImage === index
-                      ? "ring-2 ring-[var(--color-neon-pink)]"
-                      : ""
+                      ? "border-[#39FF14] shadow-lg shadow-[#39FF14]/30"
+                      : "border-transparent hover:border-gray-600"
                   }`}
                 >
                   <img
                     src={image}
                     alt={`${product.name} ${index + 1}`}
-                    className="w-full h-20 object-cover rounded"
-                    style={{ filter: "brightness(0.9) contrast(1.1)" }}
+                    className="w-full h-24 object-cover"
                   />
+                  {selectedImage === index && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#39FF14]/20 to-transparent" />
+                  )}
                 </button>
               ))}
             </div>
@@ -107,14 +107,17 @@ const ProductDetailPage = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <div className="mb-4">
+            <div className="mb-6">
               <p
-                className="text-[var(--color-neon-pink)] text-sm mb-2"
-                style={{ fontFamily: "var(--font-family-share-tech)" }}
+                className="text-[#00E5FF] text-sm mb-2 uppercase tracking-wider"
+                style={{ fontFamily: "var(--font-family-space)" }}
               >
                 {product.category}
               </p>
-              <h1 className="text-4xl font-bold mb-4 text-gradient-cyber uppercase">
+              <h1
+                className="text-5xl font-bold mb-4 text-gradient-neon"
+                style={{ fontFamily: "var(--font-family-bebas)" }}
+              >
                 {product.name}
               </h1>
 
@@ -123,9 +126,9 @@ const ProductDetailPage = () => {
                   {[...Array(5)].map((_, i) => (
                     <FiStar
                       key={i}
-                      className={`text-lg ${
+                      className={`text-xl ${
                         i < Math.floor(product.rating)
-                          ? "text-[var(--color-neon-pink)] fill-current"
+                          ? "text-[#FFD700] fill-current"
                           : "text-gray-600"
                       }`}
                     />
@@ -136,42 +139,40 @@ const ProductDetailPage = () => {
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 mb-6">
-                <span className="text-4xl font-bold text-[var(--color-neon-pink)]">
+              <div className="flex items-center gap-4 mb-8">
+                <span className="text-5xl font-bold text-gradient-gold">
                   ${product.price}
                 </span>
                 {product.originalPrice && (
-                  <span className="text-xl text-gray-500 line-through">
-                    ${product.originalPrice}
-                  </span>
-                )}
-                {product.originalPrice && (
-                  <span className="px-3 py-1 bg-[var(--color-neon-pink)]/20 text-[var(--color-neon-pink)] rounded text-sm">
-                    {Math.round(
-                      ((product.originalPrice - product.price) /
-                        product.originalPrice) *
-                        100
-                    )}
-                    % OFF
-                  </span>
+                  <>
+                    <span className="text-2xl text-gray-500 line-through">
+                      ${product.originalPrice}
+                    </span>
+                    <span className="px-3 py-1 bg-gradient-to-r from-[#FF1493] to-[#E91E63] text-white rounded-full text-sm font-bold">
+                      {Math.round(
+                        ((product.originalPrice - product.price) /
+                          product.originalPrice) *
+                          100
+                      )}
+                      % OFF
+                    </span>
+                  </>
                 )}
               </div>
 
-              <p className="text-gray-400 mb-6">{product.description}</p>
-
               {/* Color Selection */}
               {product.colors && (
-                <div className="mb-6">
-                  <h3 className="font-bold mb-3">Color</h3>
+                <div className="mb-8">
+                  <h3 className="font-bold mb-4 text-white">Select Color</h3>
                   <div className="flex gap-3">
                     {product.colors.map((color) => (
                       <button
                         key={color}
                         onClick={() => setSelectedColor(color)}
-                        className={`px-4 py-2 rounded border-2 transition-all ${
+                        className={`px-6 py-3 rounded-full border-2 transition-all ${
                           selectedColor === color
-                            ? "border-[var(--color-neon-pink)] bg-[var(--color-neon-pink)]/20 text-[var(--color-neon-pink)]"
-                            : "border-gray-600 text-gray-400 hover:border-[var(--color-neon-pink)]"
+                            ? "border-[#39FF14] bg-[#39FF14]/20 text-[#39FF14]"
+                            : "border-gray-600 text-gray-400 hover:border-gray-400"
                         }`}
                       >
                         {color}
@@ -182,21 +183,21 @@ const ProductDetailPage = () => {
               )}
 
               {/* Quantity */}
-              <div className="mb-6">
-                <h3 className="font-bold mb-3">Quantity</h3>
+              <div className="mb-8">
+                <h3 className="font-bold mb-4 text-white">Quantity</h3>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded border border-gray-600 text-gray-400 hover:border-[var(--color-neon-pink)] hover:text-[var(--color-neon-pink)] transition-all"
+                    className="w-12 h-12 rounded-lg border-2 border-gray-600 text-gray-400 hover:border-[#FF1493] hover:text-[#FF1493] transition-all text-xl"
                   >
                     -
                   </button>
-                  <span className="text-xl font-bold w-12 text-center">
+                  <span className="text-2xl font-bold text-white w-16 text-center">
                     {quantity}
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded border border-gray-600 text-gray-400 hover:border-[var(--color-neon-pink)] hover:text-[var(--color-neon-pink)] transition-all"
+                    className="w-12 h-12 rounded-lg border-2 border-gray-600 text-gray-400 hover:border-[#39FF14] hover:text-[#39FF14] transition-all text-xl"
                   >
                     +
                   </button>
@@ -207,74 +208,125 @@ const ProductDetailPage = () => {
               <div className="flex gap-4 mb-8">
                 <button
                   onClick={handleAddToCart}
-                  className="btn-cyber flex-1 flex items-center justify-center gap-2"
+                  className="btn-neon flex-1 flex items-center justify-center gap-2"
                 >
-                  <FiShoppingCart />
+                  <FiShoppingCart className="text-xl" />
                   ADD TO CART
                 </button>
                 <button
                   onClick={handleWishlistToggle}
-                  className={`p-3 rounded border-2 transition-all ${
+                  className={`p-4 rounded-full border-2 transition-all ${
                     isInWishlist(product.id)
-                      ? "border-[var(--color-neon-pink)] bg-[var(--color-neon-pink)]/20 text-[var(--color-neon-pink)]"
-                      : "border-gray-600 text-gray-400 hover:border-[var(--color-neon-pink)]"
+                      ? "border-[#FF1493] bg-[#FF1493]/20 text-[#FF1493]"
+                      : "border-gray-600 text-gray-400 hover:border-[#FF1493] hover:text-[#FF1493]"
                   }`}
                 >
                   <FiHeart
-                    className={isInWishlist(product.id) ? "fill-current" : ""}
+                    className={`text-xl ${
+                      isInWishlist(product.id) ? "fill-current" : ""
+                    }`}
                   />
                 </button>
-                <button className="p-3 rounded border-2 border-gray-600 text-gray-400 hover:border-[var(--color-neon-pink)] hover:text-[var(--color-neon-pink)] transition-all">
-                  <FiShare2 />
+                <button className="p-4 rounded-full border-2 border-gray-600 text-gray-400 hover:border-[#00E5FF] hover:text-[#00E5FF] transition-all">
+                  <FiShare2 className="text-xl" />
                 </button>
               </div>
 
               {/* Features */}
-              <div className="space-y-3 border-t border-gray-800 pt-6">
-                <div className="flex items-center gap-3 text-gray-400">
-                  <FiTruck className="text-[var(--color-neon-pink)]" />
-                  <span>Free shipping on orders over $100</span>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-4 card-modern">
+                  <FiTruck className="text-2xl text-[#39FF14] mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">Free Shipping</p>
                 </div>
-                <div className="flex items-center gap-3 text-gray-400">
-                  <FiShield className="text-[var(--color-neon-pink)]" />
-                  <span>Secure payment & data protection</span>
+                <div className="text-center p-4 card-modern">
+                  <FiShield className="text-2xl text-[#00E5FF] mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">Secure Payment</p>
                 </div>
-                <div className="flex items-center gap-3 text-gray-400">
-                  <FiRefreshCw className="text-[var(--color-neon-pink)]" />
-                  <span>30-day return policy</span>
+                <div className="text-center p-4 card-modern">
+                  <FiRefreshCw className="text-2xl text-[#FF1493] mx-auto mb-2" />
+                  <p className="text-xs text-gray-400">Easy Returns</p>
                 </div>
               </div>
-
-              {/* Product Details */}
-              {(product.material || product.dimensions) && (
-                <div className="border-t border-gray-800 pt-6 mt-6">
-                  <h3 className="font-bold mb-3">Product Details</h3>
-                  <dl className="space-y-2 text-gray-400">
-                    {product.material && (
-                      <>
-                        <dt className="inline font-semibold">Material: </dt>
-                        <dd className="inline">{product.material}</dd>
-                        <br />
-                      </>
-                    )}
-                    {product.dimensions && (
-                      <>
-                        <dt className="inline font-semibold">Dimensions: </dt>
-                        <dd className="inline">{product.dimensions}</dd>
-                      </>
-                    )}
-                  </dl>
-                </div>
-              )}
             </div>
           </motion.div>
+        </div>
+
+        {/* Tabs Section */}
+        <div className="mt-16">
+          <div className="flex gap-4 border-b border-gray-700">
+            {["description", "details", "reviews"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-6 py-3 capitalize font-semibold transition-all ${
+                  activeTab === tab
+                    ? "text-[#39FF14] border-b-2 border-[#39FF14]"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div className="py-8">
+            {activeTab === "description" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-gray-300 space-y-4"
+              >
+                <p>{product.description}</p>
+                <p>
+                  Experience luxury and functionality with this premium bag from
+                  FreshOff's exclusive collection.
+                </p>
+              </motion.div>
+            )}
+
+            {activeTab === "details" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-2"
+              >
+                {product.material && (
+                  <div className="flex justify-between py-2 border-b border-gray-800">
+                    <span className="text-gray-400">Material</span>
+                    <span className="text-white">{product.material}</span>
+                  </div>
+                )}
+                {product.dimensions && (
+                  <div className="flex justify-between py-2 border-b border-gray-800">
+                    <span className="text-gray-400">Dimensions</span>
+                    <span className="text-white">{product.dimensions}</span>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === "reviews" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-8"
+              >
+                <p className="text-gray-400">
+                  No reviews yet. Be the first to review!
+                </p>
+              </motion.div>
+            )}
+          </div>
         </div>
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-20">
-            <h2 className="text-3xl font-bold mb-8 text-gradient-cyber text-center">
-              RELATED PRODUCTS
+            <h2
+              className="text-4xl font-bold mb-8 text-gradient-gold text-center"
+              style={{ fontFamily: "var(--font-family-bebas)" }}
+            >
+              YOU MAY ALSO LIKE
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedProducts.map((product) => (
