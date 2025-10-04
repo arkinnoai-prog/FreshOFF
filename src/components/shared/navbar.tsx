@@ -54,14 +54,16 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="relative w-12 h-12"
             >
-          <img src="/src/assets/logo/logo.png" alt="Logo" className="w-10 h-10 object-cover" />  
+              <img
+                src="/src/assets/logo/logos.png"
+                alt="Logo"
+                className="w-20 h-10 object-contain mix-blend-screen"
+                style={{
+                  filter: "drop-shadow(0 0 10px rgba(255, 20, 147, 0.3))",
+                }}
+              />
             </motion.div>
-            <span
-              className="text-2xl font-bold text-gradient-gold"
-              style={{ fontFamily: "var(--font-family-bebas)" }}
-            >
-              FRESHOFF
-            </span>
+    
           </Link>
 
           {/* Desktop Navigation */}

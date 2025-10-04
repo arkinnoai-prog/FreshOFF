@@ -13,6 +13,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { products } from "../data/product";
 import ProductCard from "../components/productCard";
+import CharacterSlider from "../components/slider/CharacterSlider";
 
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -269,6 +270,10 @@ const HomePage = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      <section className="py-20 relative neon-grid">
+        <CharacterSlider />
       </section>
 
       {/* Features Section */}
