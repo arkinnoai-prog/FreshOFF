@@ -35,7 +35,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-5xl md:text-6xl lg:text-7xl text-[#d2b46d]"
+              className="text-5xl md:text-6xl lg:text-7xl text-[#957E5B]"
               style={{
                 fontFamily: "'Great Vibes', cursive",
                 letterSpacing: "0.5px",
@@ -51,12 +51,12 @@ const HeroSection = () => {
                 initial={{ opacity: 0, y: 10, scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ delay: 0.35, duration: 0.6 }}
-                className="absolute left-1/2 -translate-x-1/2 -top-18 md:-top-24 lg:-top-28"
+                className="absolute left-1/2 -translate-x-1/2 -top-18 md:-top-24 lg:-top-34"
               >
                 <img
                   src={logo}
                   alt="Logo"
-                  className="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 xl:w-36 xl:h-36 object-contain"
+                  className="w-13 h-13 md:w-24 md:h-18 lg:w-29 lg:h-29 xl:w-50 xl:h-50 object-contain"
                 />
               </motion.div>
 
