@@ -1,11 +1,10 @@
-// src/components/ProductCard.tsx - Updated with new theme
+// src/components/ProductCard.tsx - Professional and Elegant Design
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FiHeart, FiShoppingCart, FiEye, FiStar } from "react-icons/fi";
 import { useCart } from "../context/cartContext";
 import type { Product } from "../types";
 import { useWishlist } from "../context/wishlistContext";
-import type { nav } from "framer-motion/client";
 
 interface ProductCardProps {
   product: Product;
@@ -25,26 +24,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <motion.div whileHover={{ y: -5 }} className="card-modern group relative">
-      <div className="relative" onClick={() => navigate(`/product/${product.id}`)}>
-        <div className="aspect-square overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#150027] to-[#1a0033]">
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="group relative bg-[#1a0033]/40 rounded-2xl overflow-hidden border border-white/5 hover:border-white/10 transition-all duration-500"
+    >
+      <div className="relative">
+        {/* Image Container */}
+        <div
+          className="aspect-square overflow-hidden bg-[#150027] cursor-pointer"
+          onClick={() => navigate(`/product/${product.id}`)}
+        >
           <img
             src={product.images[0]}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[#150027]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Subtle Overlay on Hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#150027]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
+          {/* Discount Badge */}
           {product.originalPrice && (
-            <div className="absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-[#FF1493] to-[#E91E63] text-white text-sm font-bold rounded-full">
+            <div className="absolute top-4 left-4 px-3 py-1.5 bg-white text-[#150027] text-xs font-semibold rounded-full">
               -
               {Math.round(
                 ((product.originalPrice - product.price) /
                   product.originalPrice) *
                   100
               )}
-              %
+              % OFF
             </div>
           )}
 
@@ -52,65 +60,89 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className="absolute top-4 right-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={handleWishlistToggle}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleWishlistToggle();
+              }}
               className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                 isInWishlist(product.id)
-                  ? "bg-[#FF1493] text-white shadow-lg shadow-[#FF1493]/50"
-                  : "bg-white/10 backdrop-blur-md text-white hover:bg-[#FF1493]/20 border border-white/20"
+                  ? "bg-white text-[#150027]"
+                  : "bg-white/10 backdrop-blur-md text-white hover:bg-white/20 border border-white/20"
               }`}
             >
               <FiHeart
                 className={isInWishlist(product.id) ? "fill-current" : ""}
               />
             </motion.button>
-            <Link
-              to={`/product/${product.id}`}
-              className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[#00E5FF]/20 border border-white/20 transition-all"
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/product/${product.id}`);
+              }}
+              className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/20 border border-white/20 transition-all"
             >
               <FiEye />
-            </Link>
+            </button>
           </div>
 
-          {/* Add to Cart Button */}
+          {/* Add to Cart Button - Elegant Slide Up */}
           <motion.button
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            onClick={() => addToCart(product)}
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-[#FF1493] to-[#9D00FF] text-white py-4 flex items-center justify-center gap-2 font-semibold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-full group-hover:translate-y-0"
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(product);
+            }}
+            className="absolute bottom-0 left-0 right-0 bg-white text-[#150027] py-4 flex items-center justify-center gap-2 font-semibold text-sm uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-full group-hover:translate-y-0"
           >
-            <FiShoppingCart />
+            <FiShoppingCart className="text-lg" />
             Add to Cart
           </motion.button>
         </div>
 
+        {/* Product Information */}
         <div className="p-6">
+          {/* Rating */}
           <div className="flex items-center gap-1 mb-3">
             {[...Array(5)].map((_, i) => (
               <FiStar
                 key={i}
                 className={`text-sm ${
                   i < Math.floor(product.rating)
-                    ? "text-[#FFD700] fill-current"
+                    ? "text-white fill-current"
                     : "text-gray-600"
                 }`}
               />
             ))}
-            <span className="text-xs text-gray-400 ml-2">
+            <span className="text-xs text-gray-500 ml-2">
               ({product.reviews})
             </span>
           </div>
 
+          {/* Product Name */}
           <Link to={`/product/${product.id}`}>
-            <h3 className="font-semibold text-lg mb-2 text-white hover:text-[#FF1493] transition-colors line-clamp-1">
+            <h3
+              className="font-medium text-lg mb-2 text-white hover:text-gray-300 transition-colors line-clamp-1"
+              style={{ fontFamily: "var(--font-family-inter)" }}
+            >
               {product.name}
             </h3>
           </Link>
 
-          <p className="text-gray-400 text-sm mb-4">{product.category}</p>
+          {/* Category */}
+          <p
+            className="text-gray-500 text-sm mb-4 uppercase tracking-wider"
+            style={{ fontFamily: "var(--font-family-space)", fontSize: "12px" }}
+          >
+            {product.category}
+          </p>
 
+          {/* Price Section */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-gradient-neon">
+            <div className="flex items-center gap-3">
+              <span
+                className="text-2xl font-bold text-white"
+                style={{ fontFamily: "var(--font-family-playfair)" }}
+              >
                 ${product.price}
               </span>
               {product.originalPrice && (
@@ -121,16 +153,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           </div>
 
-          {product.tags && (
+          {/* Tags - Subtle and Elegant */}
+          {product.tags && product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-4">
               {product.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs px-3 py-1 bg-gradient-to-r from-[#FF1493]/10 to-[#9D00FF]/10 text-[#FF1493] rounded-full border border-[#FF1493]/20"
+                  className="text-xs px-3 py-1 bg-white/5 text-gray-400 rounded-full border border-white/10"
                 >
                   {tag}
                 </span>
               ))}
+            </div>
+          )}
+
+          {/* Stock Status or Special Badge */}
+          {product.stock && product.stock < 10 && (
+            <div className="mt-3 text-xs text-gray-400">
+              Only {product.stock} left in stock
             </div>
           )}
         </div>

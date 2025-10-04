@@ -16,6 +16,7 @@ export const products: Product[] = [
     description:
       "Elegant rose-colored tote bag crafted from premium Italian leather with gold-tone hardware.",
     rating: 4.8,
+    stock: 10,
     reviews: 245,
     inStock: true,
     tags: ["Bestseller", "Premium", "New Arrival"],

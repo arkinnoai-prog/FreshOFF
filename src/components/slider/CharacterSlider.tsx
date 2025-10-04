@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import bag11 from "../../assets/bags/bag111.png";
-import bag22 from "../../assets/bags/bag222.png";
-import bag33 from "../../assets/bags/bag333.png";
-import bag44 from "../../assets/bags/bag444.png";
-import bag55 from "../../assets/bags/bag555.png";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface Bag {
   id: number;
@@ -13,54 +8,23 @@ interface Bag {
   image: string;
   bgColor: string;
   primaryColor: string;
+  price?: string;
+  rating?: number;
+  features?: string[];
+  description?: string;
 }
 
-const BagSlider: React.FC = () => {
+interface CharacterSliderProps {
+  bags: Bag[];
+  onBagSelect: (bagId: number) => void;
+}
+
+const CharacterSlider: React.FC<CharacterSliderProps> = ({
+  bags,
+  onBagSelect,
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const bags: Bag[] = [
-    {
-      id: 1,
-      name: "Urban Explorer",
-      title: "Premium Backpack",
-      image: bag11,
-      bgColor: "from-purple-900 to-pink-600",
-      primaryColor: "#3E5213", // olive green
-    },
-    {
-      id: 2,
-      name: "Classic Leather",
-      title: "Luxury Handbag",
-      image: bag22,
-      bgColor: "from-blue-900 to-purple-600",
-      primaryColor: "#03050C", // deep black-blue
-    },
-    {
-      id: 3,
-      name: "Travel Master",
-      title: "Duffel Bag",
-      image: bag33,
-      bgColor: "from-indigo-900 to-pink-600",
-      primaryColor: "#002A31", // dark teal
-    },
-    {
-      id: 4,
-      name: "Executive Elite",
-      title: "Business Briefcase",
-      image: bag44,
-      bgColor: "from-red-900 to-purple-600",
-      primaryColor: "#130F1E", // dark purple
-    },
-    {
-      id: 5,
-      name: "Minimalist Tote",
-      title: "Canvas Bag",
-      image: bag55,
-      bgColor: "from-purple-800 to-pink-700",
-      primaryColor: "#001D1A", // dark green
-    },
-  ];
 
   const handlePrev = () => {
     if (isAnimating) return;
@@ -92,12 +56,16 @@ const BagSlider: React.FC = () => {
     return visible;
   };
 
+  const handleCardClick = (bag: Bag) => {
+    onBagSelect(bag.id);
+  };
+
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden font-roboto">
       {/* Left Preview Section */}
       <div className="absolute left-0 top-0 w-[40%] h-full">
         {/* Background with gradient */}
-        <div className={`absolute inset-0  transition-all duration-700`}>
+        <div className={`absolute inset-0 transition-all duration-700`}>
           <div className="absolute inset-0 bg-black/20"></div>
         </div>
 
@@ -109,7 +77,7 @@ const BagSlider: React.FC = () => {
               key={activeIndex}
               src={bags[activeIndex].image}
               alt={bags[activeIndex].name}
-              className="w-full h-full object-cover  animate-[fadeIn_0.7s_ease-in-out]"
+              className="w-full h-full object-cover animate-[fadeIn_0.7s_ease-in-out]"
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
@@ -214,7 +182,7 @@ const BagSlider: React.FC = () => {
             {getVisibleBags().map((bag, idx) => (
               <div
                 key={`${bag.id}-${idx}`}
-                className={`relative group transition-all duration-500 ease-out ${
+                className={`relative group transition-all duration-500 ease-out cursor-pointer ${
                   idx === 0
                     ? "animate-[scaleIn_0.6s_ease-out]"
                     : "animate-[slideIn_0.6s_ease-out]"
@@ -224,6 +192,7 @@ const BagSlider: React.FC = () => {
                   transform: `translateX(${isAnimating ? "20px" : "0"})`,
                   opacity: isAnimating ? 0 : 1,
                 }}
+                onClick={() => handleCardClick(bag)}
               >
                 <div
                   className={`relative rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-white/30 ${
@@ -409,4 +378,4 @@ const BagSlider: React.FC = () => {
   );
 };
 
-export default BagSlider;
+export default CharacterSlider;
