@@ -14,6 +14,10 @@ import bag4second from "../assets/bags/bag4second.png";
 import bag4third from "../assets/bags/bag4third.png";
 import bag5second from "../assets/bags/bag5second.png";
 import bag5third from "../assets/bags/bag5third.png";
+import c1 from "../assets/bags/categories/c1.png";
+import c2 from "../assets/bags/categories/c2.png";
+import c3 from "../assets/bags/categories/c3.png";
+import c4 from "../assets/bags/categories/c4.png";
 
 import {
   FiTruck,
@@ -55,7 +59,7 @@ Includes dust bag.
 This item is final sale and not eligible for return.  
 
 **Condition Report:**  
-Revive | Fair | Good | ⭐ Very Good | Like New  
+Revive | Fair | Good | Very Good | Like New  
 Faint press marks throughout the exterior.  
 
 **Year:** 2015  
@@ -87,7 +91,7 @@ Includes clochette, lock, keys, felt, care booklet, raincoat, dust bag and box.
 This item is final sale and not eligible for return.  
 
 **Condition Report:**  
-Revive | Fair | Good | ⭐ Very Good | Like New  
+Revive | Fair | Good | Very Good | Like New  
 Minor scratching and surface wear to hardware. Partial plastic and minor scratching to hardware feet. Natural markings throughout the exotic skin exterior.  
 
 **Year:** 2022  
@@ -118,7 +122,7 @@ Includes clochette, lock, keys, felt, care booklet, dust bag and box.
 This item is final sale and not eligible for return.  
 
 **Condition Report:**  
-Revive | Fair | Good | Very Good | ⭐ New  
+Revive | Fair | Good | Very Good |  New  
 No visible signs of wear. Plastic intact.  
 
 **Year:** 2025  
@@ -149,7 +153,7 @@ Includes clochette, lock, keys, felt, care booklet, raincoat, dust bag and box.
 This item is final sale and not eligible for return.  
 
 **Condition Report:**  
-Revive | Fair | Good | ⭐ Very Good | Like New  
+Revive | Fair | Good | Very Good | Like New  
 Minor scratching and surface wear to hardware. Partial plastic and minor scratching to hardware feet. Natural markings throughout the exotic skin exterior.  
 
 **Year:** 2022  
@@ -180,7 +184,7 @@ Includes clochette, lock, keys, felt, care booklet, raincoat, dust bag and box.
 This item is final sale and not eligible for return.  
 
 **Condition Report:**  
-Revive | Fair | Good | ⭐ Very Good | Like New  
+Revive | Fair | Good | Very Good | Like New  
 Minor scratching and surface wear to hardware. Partial plastic and minor scratching to hardware feet. Natural markings throughout the exotic skin exterior.  
 
 **Year:** 2022  
@@ -231,22 +235,22 @@ export const features = [
 export const categories = [
   {
     name: "LUXURY TOTES",
-    image: "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=400",
+    image: c1,
     count: 45,
   },
   {
     name: "EVENING CLUTCHES",
-    image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400",
+    image: c2,
     count: 32,
   },
   {
     name: "DESIGNER BAGS",
-    image: "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=400",
+    image: c3,
     count: 28,
   },
   {
     name: "TRAVEL COLLECTION",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400",
+    image: c4,
     count: 19,
   },
 ];

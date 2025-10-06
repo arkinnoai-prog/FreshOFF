@@ -13,6 +13,7 @@ import CheckoutPage from "./pages/CheckOutPage";
 import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
 import WishlistPage from "./pages/wishListPage";
+import VirtualTryOn from "./pages/VirtualTryOn";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/tryon" element={<VirtualTryOn />} />
             </Routes>
             <Footer />
             <Toaster position="bottom-right" />

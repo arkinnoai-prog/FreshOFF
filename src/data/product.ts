@@ -1,17 +1,28 @@
-// src/data/products.ts
-
 import type { Product } from "../types";
+import black1 from "../assets/bags/featured-products/black1.png";
+import black2 from "../assets/bags/featured-products/black2.png";
 
+import blue1 from "../assets/bags/featured-products/blue1.png";
+import blue2 from "../assets/bags/featured-products/blue2.png";
+
+import orange1 from "../assets/bags/featured-products/orange1.png";
+import orange2 from "../assets/bags/featured-products/orange2.png";
+
+import rose from "../assets/bags/featured-products/rose1.png";
+import rose2 from "../assets/bags/featured-products/rose2.png";
+
+import white1 from "../assets/bags/featured-products/white1.png";
+import white2 from "../assets/bags/featured-products/white2.png";
+
+import green1 from "../assets/bags/featured-products/green1.png";
+import green2 from "../assets/bags/featured-products/green2.png";
 export const products: Product[] = [
   {
     id: "1",
     name: "Luxe Rose Tote",
     price: 299,
     originalPrice: 399,
-    images: [
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800",
-      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800",
-    ],
+    images: [rose2, rose],
     category: "Tote Bags",
     description:
       "Elegant rose-colored tote bag crafted from premium Italian leather with gold-tone hardware.",
@@ -29,10 +40,7 @@ export const products: Product[] = [
     name: "Pearl Clutch Evening Bag",
     price: 199,
     originalPrice: 299,
-    images: [
-      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=800",
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800",
-    ],
+    images: [green1, green2],
     category: "Clutches",
     description:
       "Stunning pearl-embellished clutch perfect for elegant evenings and special occasions.",
@@ -49,8 +57,8 @@ export const products: Product[] = [
     name: "Bloom Crossbody",
     price: 179,
     images: [
-      "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=800",
-      "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=800",
+      blue1,
+      blue2
     ],
     category: "Crossbody",
     description:
@@ -69,8 +77,8 @@ export const products: Product[] = [
     price: 449,
     originalPrice: 599,
     images: [
-      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800",
-      "https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=800",
+      black1,
+      black2
     ],
     category: "Satchels",
     description:
@@ -88,8 +96,8 @@ export const products: Product[] = [
     name: "Sunset Beach Tote",
     price: 129,
     images: [
-      "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=800",
-      "https://images.unsplash.com/photo-1614179689702-355944cd0918?w=800",
+      orange2,
+      orange1
     ],
     category: "Tote Bags",
     description:
@@ -107,8 +115,8 @@ export const products: Product[] = [
     name: "Crystal Mini Backpack",
     price: 219,
     images: [
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800",
-      "https://images.unsplash.com/photo-1581605405669-fcdf81165afa?w=800",
+      white1,
+      white2
     ],
     category: "Backpacks",
     description:

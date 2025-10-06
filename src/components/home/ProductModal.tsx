@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { FiX, FiShoppingCart } from "react-icons/fi";
 import { ShoppingBag, Star, Package } from "lucide-react";
-import { useState } from "react";
+import { useState, type JSX } from "react";
 
 export interface Bag {
   id: number;
@@ -16,6 +16,7 @@ export interface Bag {
   description?: string;
   additionalImages?: string[];
 }
+
 interface ProductModalProps {
   bag: Bag | null;
   onClose: () => void;
@@ -32,6 +33,67 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
       x: e.clientX,
       y: e.clientY,
     });
+  };
+
+  // Function to parse and render the description with proper formatting
+  const renderDescription = (text: string) => {
+    if (!text) return null;
+
+    const lines = text.trim().split("\n");
+    const elements: JSX.Element[] = [];
+    let key = 0;
+
+    lines.forEach((line, index) => {
+      const trimmedLine = line.trim();
+
+      // Skip empty lines
+      if (!trimmedLine) {
+        return;
+      }
+
+      // Handle bold headings (lines starting with **)
+      if (trimmedLine.startsWith("**") && trimmedLine.endsWith("**")) {
+        const content = trimmedLine.slice(2, -2);
+        elements.push(
+          <h5 key={key++} className="text-lg font-bold text-white mt-4 mb-2">
+            {content}
+          </h5>
+        );
+      }
+      // Handle bold text within lines
+      else if (trimmedLine.includes("**")) {
+        const parts = trimmedLine.split("**");
+        elements.push(
+          <p
+            key={key++}
+            className="text-base text-white/90 leading-relaxed mb-2"
+          >
+            {parts.map((part, i) =>
+              i % 2 === 1 ? (
+                <strong key={i} className="font-semibold">
+                  {part}
+                </strong>
+              ) : (
+                part
+              )
+            )}
+          </p>
+        );
+      }
+      // Regular text
+      else {
+        elements.push(
+          <p
+            key={key++}
+            className="text-base text-white/90 leading-relaxed mb-2"
+          >
+            {trimmedLine}
+          </p>
+        );
+      }
+    });
+
+    return <div className="space-y-1">{elements}</div>;
   };
 
   return (
@@ -155,12 +217,12 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
               </div>
 
               {/* Description */}
-              <p className="text-base text-white/90 leading-relaxed">
-                {bag.description}
-              </p>
+              <div className="pt-2">
+                {renderDescription(bag.description || "")}
+              </div>
 
               {/* Features */}
-              <div className="space-y-3">
+              <div className="space-y-3 pt-4">
                 <h4 className="text-xl font-semibold text-white">Features</h4>
                 {bag.features?.map((feature, i) => (
                   <div key={i} className="flex items-center gap-3 group">
@@ -194,6 +256,47 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.5);
+        }
+      `}</style>
     </div>
   );
 };

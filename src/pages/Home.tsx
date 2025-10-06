@@ -10,6 +10,7 @@ import FeaturedProducts from "../components/home/FeaturedProduct";
 import NewsletterSection from "../components/home/NewsSelector";
 import InteractiveBentoGallery from "@/components/blocks/interactive-bento-gallery";
 import { auctionMediaItems } from "@/data/auctionData";
+import { VirtualTryOnHero } from "@/components/blocks/spotlight-new";
 
 const HomePage = () => {
   const [selectedBag, setSelectedBag] = useState<Bag | null>(null);
@@ -198,6 +199,30 @@ const HomePage = () => {
           <CharacterSlider bags={bags} onBagSelect={handleBagSelection} />
         </div>
       </section>
+
+      <div
+        className="relative"
+        style={{
+          background: `linear-gradient(135deg, 
+            #000000 0%, 
+            #0a0a0a 33%, 
+            #0f0f0f 66%, 
+            #050505 100%)`,
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(circle at center, 
+              rgba(255,255,255,0.03) 0%, 
+              transparent 70%)`,
+            backdropFilter: "blur(0.5px)",
+          }}
+        />
+        <div className="relative z-10">
+          <VirtualTryOnHero />
+        </div>
+      </div>
 
       {/* Product Popup Modal */}
       <ProductModal bag={selectedBag} onClose={handleCloseModal} />
