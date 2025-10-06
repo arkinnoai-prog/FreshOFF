@@ -1,4 +1,3 @@
-import React from "react";
 import Louis from "../../assets/brands/Louis_Vuitton_logo_and_wordmark (1).png";
 import LongChamp from "../../assets/brands/Longchamp_logo.svg.png";
 import Flurla from "../../assets/brands/furla-logo-black-and-white.png";

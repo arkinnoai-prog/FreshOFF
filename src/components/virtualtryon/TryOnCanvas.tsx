@@ -5,16 +5,8 @@ import {
   Wand2,
   Download,
   RotateCcw,
-  Loader2,
-  Check,
   ArrowLeft,
-  Share2,
-  Heart,
   Sparkles,
-  Camera,
-  ZoomIn,
-  ZoomOut,
-  Move,
   ScanLine,
   Eye,
 } from "lucide-react";
@@ -36,15 +28,11 @@ interface Outfit {
 
 interface TryOnCanvasProps {
   model: Model;
-  onComplete: (result: any) => void;
+
   onBack: () => void;
 }
 
-const TryOnCanvas: React.FC<TryOnCanvasProps> = ({
-  model,
-  onComplete,
-  onBack,
-}) => {
+const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const canvasRef = useRef<any>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
   const [selectedOutfit, setSelectedOutfit] = useState<Outfit | null>(null);
@@ -52,7 +40,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  //   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
   const [pendingOutfit, setPendingOutfit] = useState<Outfit | null>(null);
   const [scanPosition, setScanPosition] = useState<number>(50);
@@ -100,6 +88,8 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({
     if (existingCanvas) {
       existingCanvas.dispose();
     }
+
+    console.log(selectedOutfit, "selectedOutfit");
 
     const canvas = new fabric.Canvas(canvasRef.current, {
       width: canvasWidth,
@@ -232,19 +222,19 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({
     }
   };
 
-  const handleShare = async (): Promise<void> => {
-    if (navigator.share && resultImage) {
-      try {
-        await navigator.share({
-          title: "My Virtual Try-On",
-          text: "Check out my virtual try-on result!",
-          url: window.location.href,
-        });
-      } catch (err) {
-        console.log("Share failed:", err);
-      }
-    }
-  };
+  //   const handleShare = async (): Promise<void> => {
+  //     if (navigator.share && resultImage) {
+  //       try {
+  //         await navigator.share({
+  //           title: "My Virtual Try-On",
+  //           text: "Check out my virtual try-on result!",
+  //           url: window.location.href,
+  //         });
+  //       } catch (err) {
+  //         console.log("Share failed:", err);
+  //       }
+  //     }
+  //   };
 
   const handleOutfitSelect = (outfit: Outfit): void => {
     confirmAndApply(outfit);
@@ -282,9 +272,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({
   };
 
   // Handle scanning interaction
-  const handleScannerMouseDown = (
-    e: React.MouseEvent<HTMLDivElement>
-  ): void => {
+  const handleScannerMouseDown = (): void => {
     setIsScanning(true);
   };
 

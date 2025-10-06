@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FiArrowRight } from "react-icons/fi";
 import { useRef } from "react";
 import { ShinyButton } from "../ui/shiny-button";
 import logo from "../../assets/logo/logos.png";

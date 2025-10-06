@@ -87,7 +87,7 @@ const CharacterSlider: React.FC<CharacterSliderProps> = ({
         <div className="absolute left-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-0 cursor-pointer">
           <div className="relative flex flex-col items-center">
             <div className="w-[2px] h-12=0 bg-white/30"></div>
-            {bags.map((bag, index) => (
+            {bags.map((_, index) => (
               <React.Fragment key={index}>
                 <div
                   className="relative group"

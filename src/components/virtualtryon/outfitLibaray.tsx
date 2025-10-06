@@ -1,17 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Upload,
-  Grid,
-  Plus,
-  Star,
-  TrendingUp,
-  X,
-  Shirt,
-  Package,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
+import { Grid, Plus, Star, TrendingUp, Shirt, Package } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { sampleOutfits } from "@/assets/outfit";
 

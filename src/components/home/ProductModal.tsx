@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { FiX, FiShoppingCart } from "react-icons/fi";
 import { ShoppingBag, Star, Package } from "lucide-react";
 import { useState, type JSX } from "react";
@@ -43,7 +42,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
     const elements: JSX.Element[] = [];
     let key = 0;
 
-    lines.forEach((line, index) => {
+    lines.forEach((line, _) => {
       const trimmedLine = line.trim();
 
       // Skip empty lines

@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { FiArrowRight } from "react-icons/fi";
 import { products } from "../../data/product";
 import ProductCard from "../productCard";
 import { ShinyButton } from "../ui/shiny-button";

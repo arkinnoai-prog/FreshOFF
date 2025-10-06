@@ -3,18 +3,13 @@ import type { ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
-  Users,
   User2,
   Loader2,
   Info,
-  Star,
-  TrendingUp,
   Search,
   Filter,
   X,
   Upload,
-  Camera,
-  ImagePlus,
   CheckCircle,
   Plus,
 } from "lucide-react";
@@ -42,13 +37,6 @@ interface ModelSelectorProps {
 
 interface GroupedModels {
   [key: string]: Model[];
-}
-
-interface Stats {
-  total: number;
-  male: number;
-  female: number;
-  unisex: number;
 }
 
 const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
@@ -86,6 +74,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
       onSelectModel(model);
     }, 600);
   };
+  console.log(showTips, "showTips");
 
   const handleFileSelect = (e: ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
@@ -153,13 +142,6 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
     },
     {} as GroupedModels
   );
-
-  const stats: Stats = {
-    total: models?.length || 0,
-    male: models?.filter((m: Model) => m.gender === "male").length || 0,
-    female: models?.filter((m: Model) => m.gender === "female").length || 0,
-    unisex: models?.filter((m: Model) => m.gender === "unisex").length || 0,
-  };
 
   if (isLoading) {
     return (

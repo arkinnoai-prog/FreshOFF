@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { stats } from "../../data/homeData";
+
 import { Component } from "../ui/image-auto-slider";
 
 const StatsSection = () => {

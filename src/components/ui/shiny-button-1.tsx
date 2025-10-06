@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import { useId } from "react";
 
 const GlowButton = ({ children = "Register" }) => {
   const id = useId().replace(/:/g, "");

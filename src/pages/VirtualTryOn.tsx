@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import ModelSelector from "@/components/virtualtryon/ModelSelector";
@@ -17,10 +17,10 @@ function VirtualTryOn() {
     setCurrentStep("canvas");
   };
 
-  const handleTryOnComplete = (result: any) => {
-    setTryOnResult(result);
-    setCurrentStep("result");
-  };
+  //   const handleTryOnComplete = (result: any) => {
+  //     setTryOnResult(result);
+  //     setCurrentStep("result");
+  //   };
 
   const handleBackToCanvas = () => {
     setCurrentStep("canvas");
@@ -48,7 +48,6 @@ function VirtualTryOn() {
             <TryOnCanvas
               key="canvas"
               model={selectedModel}
-              onComplete={handleTryOnComplete}
               onBack={handleStartOver}
             />
           )}
