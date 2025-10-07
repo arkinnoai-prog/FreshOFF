@@ -78,21 +78,9 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
     return categoryMatch && subCategoryMatch;
   });
 
-  const categories = [
-    "all",
-    "custom",
-    "dress",
-    "top",
-    "bottom",
-    "jacket",
-    "bag",
-  ];
+  const categories = ["all", "custom", "bag"];
 
   const categoryIcons: Record<string, string> = {
-    dress: "👗",
-    top: "👔",
-    bottom: "👖",
-    jacket: "🧥",
     bag: "👜",
     custom: "✨",
   };
