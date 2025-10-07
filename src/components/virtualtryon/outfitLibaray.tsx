@@ -8,6 +8,7 @@ import {
   Shirt,
   Package,
   ChevronDown,
+  ArrowDown,
 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { sampleOutfits } from "@/assets/outfit";
@@ -86,7 +87,7 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
   };
 
   const subCategories: Record<string, string[]> = {
-    bag: ["all", "box-clutch", "tote-bag", "fanny-pack"],
+    bag: ["all", "box-clutch", "Satchel"],
     custom: ["all", "uploaded"],
   };
 

@@ -4,7 +4,7 @@ export const sampleOutfits = [
   {
     id: "bag-1",
     name: "Black Box Clutch",
-    url: "src/assets/outfits/bags/box-clutch/boxc1.png",
+    url: "src/assets/bags/bag222.png",
     category: "bag",
     subCategory: "box-clutch",
   },
@@ -12,7 +12,7 @@ export const sampleOutfits = [
   {
     id: "bag-10",
     name: "Mysterious Box Clutch",
-    url: "src/assets/outfits/bags/box-clutch/boxc3.png",
+    url: "src/assets/bags/bag333.png",
     category: "bag",
     subCategory: "box-clutch",
   },
@@ -22,7 +22,7 @@ export const sampleOutfits = [
     name: "Canvas Tote Bag",
     url: "/src/assets/outfits/bags/tote-bag/t2.png",
     category: "bag",
-    subCategory: "tote-bag",
+    subCategory: "Satchel",
   },
 
   {
@@ -30,7 +30,7 @@ export const sampleOutfits = [
     name: "Pixel Tote Bag",
     url: "/src/assets/outfits/bags/tote-bag/t3.png",
     category: "bag",
-    subCategory: "tote-bag",
+    subCategory: "Satchel",
   },
 
   {
@@ -43,15 +43,15 @@ export const sampleOutfits = [
   {
     id: "bag-5",
     name: "Gold Evening Clutch",
-    url: "/src/assets/outfits/bags/box-clutch/boxc2.png",
+    url: "src/assets/bags/bag111.png",
     category: "bag",
     subCategory: "box-clutch",
   },
   {
     id: "bag-6",
     name: "Beach Tote Bag",
-    url: "src/assets/outfits/bags/tote-bag/t1.png",
+    url: "src/assets/bags/bag5.jpeg",
     category: "bag",
-    subCategory: "tote-bag",
+    subCategory: "Satchel",
   },
 ];
