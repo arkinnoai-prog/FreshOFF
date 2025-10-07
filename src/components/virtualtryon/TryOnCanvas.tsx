@@ -35,7 +35,6 @@ interface TryOnCanvasProps {
 const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const canvasRef = useRef<any>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
-  const [selectedOutfit, setSelectedOutfit] = useState<Outfit | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showResult, setShowResult] = useState<boolean>(false);
@@ -45,7 +44,21 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const [pendingOutfit, setPendingOutfit] = useState<Outfit | null>(null);
   const [scanPosition, setScanPosition] = useState<number>(50);
   const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [canvasDimensions, setCanvasDimensions] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
   const scannerRef = useRef<HTMLDivElement>(null);
+
+  const resultAspectRatio =
+    canvasDimensions.width > 0 && canvasDimensions.height > 0
+      ? `${canvasDimensions.width} / ${canvasDimensions.height}`
+      : undefined;
+
+  const resultMaxWidth =
+    canvasDimensions.width > 0
+      ? `${Math.round(canvasDimensions.width)}px`
+      : undefined;
 
   useEffect(() => {
     let cleanup: (() => void) | undefined;
@@ -74,14 +87,27 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     }
 
     const canvasContainer = document.getElementById("canvas-container");
-    if (!canvasContainer || !canvasRef.current) {
+    const canvasElement = canvasRef.current;
+
+    if (!canvasContainer || !canvasElement) {
       return () => {};
     }
 
-    const containerWidth = canvasContainer.offsetWidth - 48;
-    const aspectRatio = 3 / 4;
-    const canvasHeight = containerWidth * aspectRatio;
-    const canvasWidth = containerWidth;
+    const wrapperElement = canvasElement.parentElement as HTMLElement | null;
+    let availableWidth = canvasContainer.clientWidth;
+
+    if (wrapperElement) {
+      const computedStyle = window.getComputedStyle(wrapperElement);
+      const horizontalPadding =
+        parseFloat(computedStyle.paddingLeft || "0") +
+        parseFloat(computedStyle.paddingRight || "0");
+      availableWidth = wrapperElement.clientWidth - horizontalPadding;
+    }
+
+    const MIN_CANVAS_SIZE = 280;
+    const DEFAULT_ASPECT_RATIO = 3 / 4;
+    const canvasWidth = Math.max(availableWidth, MIN_CANVAS_SIZE);
+    const provisionalHeight = canvasWidth * DEFAULT_ASPECT_RATIO;
 
     // Check if canvas element already has a fabric instance
     const existingCanvas = (canvasRef.current as any).__canvas;
@@ -89,30 +115,55 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
       existingCanvas.dispose();
     }
 
-    console.log(selectedOutfit, "selectedOutfit");
-
-    const canvas = new fabric.Canvas(canvasRef.current, {
+    const canvas = new fabric.Canvas(canvasElement, {
       width: canvasWidth,
-      height: canvasHeight,
+      height: provisionalHeight,
       backgroundColor: "#160B26",
     });
 
     fabricCanvasRef.current = canvas;
 
     // Load model image
-    fabric.Image.fromURL(model.image_url)
+    fabric.Image.fromURL(model.image_url, {
+      crossOrigin: "anonymous",
+    })
       .then((img) => {
         // Check if canvas still exists (component might have unmounted)
         if (!fabricCanvasRef.current) return;
 
+        const imgWidth = img.width || canvasWidth;
+        const imgHeight = img.height || provisionalHeight;
+
+        const containerRect = canvasContainer.getBoundingClientRect();
+        const availableHeight = Math.max(
+          window.innerHeight - containerRect.top - 160,
+          MIN_CANVAS_SIZE
+        );
+        const maxHeight = Math.max(availableHeight, provisionalHeight);
         const scale = Math.min(
-          (canvasWidth * 0.9) / (img.width || 1),
-          (canvasHeight * 0.9) / (img.height || 1)
+          canvasWidth / imgWidth,
+          maxHeight / imgHeight,
+          1
         );
 
+        const scaledWidth = imgWidth * scale;
+        const scaledHeight = imgHeight * scale;
+
+        fabricCanvasRef.current.setDimensions(
+          {
+            width: scaledWidth,
+            height: scaledHeight,
+          },
+          {
+            backstoreOnly: false,
+          }
+        );
+
+        setCanvasDimensions({ width: scaledWidth, height: scaledHeight });
+
         img.set({
-          left: canvasWidth / 2,
-          top: canvasHeight / 2,
+          left: scaledWidth / 2,
+          top: scaledHeight / 2,
           originX: "center",
           originY: "center",
           scaleX: scale,
@@ -180,7 +231,6 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     if (!outfit) return;
 
     setIsProcessing(true);
-    setSelectedOutfit(outfit);
 
     try {
       const imageFile = await prepareImageFile(outfit);
@@ -208,7 +258,6 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const handleBackToEdit = (): void => {
     setShowResult(false);
     setResultImage(null);
-    setSelectedOutfit(null);
     setScanPosition(50);
     setIsScanning(false);
   };
@@ -486,18 +535,22 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
 
                     <div
                       ref={scannerRef}
-                      className="relative rounded-xl overflow-hidden bg-gradient-to-b from-slate-800 to-slate-900 p-4 cursor-ew-resize"
+                      className="relative w-full mx-auto rounded-xl overflow-hidden bg-gradient-to-b from-slate-800 to-slate-900 p-4 cursor-ew-resize"
+                      style={{
+                        aspectRatio: resultAspectRatio ?? "3 / 4",
+                        maxWidth: resultMaxWidth,
+                      }}
                       onMouseDown={handleScannerMouseDown}
                     >
                       <div
-                        className="relative rounded-lg overflow-hidden"
+                        className="relative w-full h-full rounded-lg overflow-hidden"
                         style={{ userSelect: "none" }}
                       >
                         {/* Original Image (Before) */}
                         <img
                           src={model.image_url}
                           alt="Original"
-                          className="w-full h-auto rounded-lg"
+                          className="w-full h-full object-contain"
                           draggable={false}
                         />
 
@@ -511,7 +564,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                           <img
                             src={resultImage!}
                             alt="Try-on result"
-                            className="w-full h-auto rounded-lg"
+                            className="w-full h-full object-contain"
                             draggable={false}
                           />
                         </div>
