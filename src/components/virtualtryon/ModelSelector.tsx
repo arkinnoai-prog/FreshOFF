@@ -403,22 +403,22 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
                               )}
 
                               {/* Gender Badge */}
-                              <div className="absolute bottom-3 left-3">
-                                <motion.div
-                                  initial={{ x: -20, opacity: 0 }}
-                                  animate={{ x: 0, opacity: 1 }}
-                                  transition={{ delay: index * 0.05 + 0.2 }}
-                                  className={`px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-medium flex items-center gap-1.5 ${
-                                    gender === "male"
-                                      ? "bg-blue-500/90 text-white"
-                                      : gender === "female"
-                                      ? "bg-pink-500/90 text-white"
-                                      : "bg-purple-500/90 text-white"
-                                  }`}
-                                >
-                                  <User2 className="w-3.5 h-3.5" />
-                                  <span className="capitalize">{gender}</span>
-                                </motion.div>
+                              <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                     
+
+                                {/* Size Badge */}
+                                {model.size && (
+                                  <motion.div
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ delay: index * 0.05 + 0.3 }}
+                                    className="px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-medium bg-slate-600/90 text-white"
+                                  >
+                                    <span className="font-semibold">
+                                      Size {model.size}
+                                    </span>
+                                  </motion.div>
+                                )}
                               </div>
 
                               {/* Model ID */}

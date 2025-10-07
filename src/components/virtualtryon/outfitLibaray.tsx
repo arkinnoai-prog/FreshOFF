@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Grid, Plus, Star, TrendingUp, Shirt, Package } from "lucide-react";
+import {
+  Grid,
+  Plus,
+  Star,
+  TrendingUp,
+  Shirt,
+  Package,
+  ChevronDown,
+} from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { sampleOutfits } from "@/assets/outfit";
 
@@ -10,6 +18,7 @@ interface Outfit {
   url: string;
   file?: File;
   category: string;
+  subCategory?: string;
   isNew?: boolean;
 }
 
@@ -24,10 +33,12 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
 }) => {
   const [uploadedOutfits, setUploadedOutfits] = useState<Outfit[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
   const [hoveredOutfit, setHoveredOutfit] = useState<string | number | null>(
     null
   );
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [showSubCategories, setShowSubCategories] = useState<boolean>(false);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -43,6 +54,7 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
             url: reader.result as string,
             file: file,
             category: "custom",
+            subCategory: "uploaded",
             isNew: true,
           };
           setUploadedOutfits((prev) => [newOutfit, ...prev]);
@@ -56,19 +68,44 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
   });
 
   const allOutfits: Outfit[] = [...uploadedOutfits, ...sampleOutfits];
-  const filteredOutfits =
-    activeCategory === "all"
-      ? allOutfits
-      : allOutfits.filter((outfit) => outfit.category === activeCategory);
 
-  const categories = ["all", "custom", "dress", "top", "bottom", "jacket"];
+  // Filter by category and subcategory
+  const filteredOutfits = allOutfits.filter((outfit) => {
+    const categoryMatch =
+      activeCategory === "all" || outfit.category === activeCategory;
+    const subCategoryMatch =
+      activeSubCategory === "all" || outfit.subCategory === activeSubCategory;
+    return categoryMatch && subCategoryMatch;
+  });
+
+  const categories = [
+    "all",
+    "custom",
+    "dress",
+    "top",
+    "bottom",
+    "jacket",
+    "bag",
+  ];
 
   const categoryIcons: Record<string, string> = {
     dress: "👗",
     top: "👔",
     bottom: "👖",
     jacket: "🧥",
+    bag: "👜",
     custom: "✨",
+  };
+
+  const subCategories: Record<string, string[]> = {
+    bag: ["all", "box-clutch", "tote-bag", "fanny-pack"],
+    custom: ["all", "uploaded"],
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setActiveSubCategory("all");
+    setShowSubCategories(category !== "all");
   };
 
   const handleDragStart = (
@@ -117,6 +154,9 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
     setIsScrolled(e.currentTarget.scrollTop > 10);
   };
 
+  const currentSubCategories =
+    activeCategory !== "all" ? subCategories[activeCategory] || [] : [];
+
   return (
     <div
       style={{
@@ -141,11 +181,12 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
           </div>
         </div>
 
+        {/* Main Categories */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => setActiveCategory(category)}
+              onClick={() => handleCategoryChange(category)}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium capitalize transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 ${
                 activeCategory === category
                   ? "bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-md"
@@ -164,6 +205,31 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
             </button>
           ))}
         </div>
+
+        {/* Subcategories */}
+        {showSubCategories && currentSubCategories.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-2"
+          >
+            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+              {currentSubCategories.map((subCategory) => (
+                <button
+                  key={subCategory}
+                  onClick={() => setActiveSubCategory(subCategory)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium capitalize transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
+                    activeSubCategory === subCategory
+                      ? "bg-violet-600/40 text-violet-300 border border-violet-500/50"
+                      : "bg-slate-800/60 hover:bg-slate-700/60 text-gray-400 border border-slate-700/50"
+                  }`}
+                >
+                  {subCategory.replace("-", " ")}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
 
       <div
@@ -246,7 +312,7 @@ const OutfitLibrary: React.FC<OutfitLibraryProps> = ({
                         {outfit.name}
                       </p>
                       <p className="text-white/80 text-[10px] capitalize mt-0.5">
-                        {outfit.category} • Click to try on
+                        {outfit.subCategory?.replace("-", " ")} • Click to try
                       </p>
                     </div>
                   </div>
