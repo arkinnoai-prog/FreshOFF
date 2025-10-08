@@ -146,7 +146,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
             <img
               src={bag.additionalImages?.[selectedImageIndex] || bag.image}
               alt={bag.name}
-              className="w-full h-full object-cover scale-125"
+              className="w-full h-full object-cover scale-107"
             />
             {/* Image overlay effects */}
             <div className="absolute inset-0">
@@ -175,7 +175,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
                 <img
                   src={img}
                   alt={`${bag.name} view ${index + 1}`}
-                  className="w-full h-full object-cover scale-110"
+                  className="w-full h-full object-cover scale-105"
                 />
                 {selectedImageIndex !== index && (
                   <div className="absolute inset-0 bg-black/30"></div>
