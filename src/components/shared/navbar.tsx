@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "@/assets/logo/logos.png";
 import {
   FiShoppingBag,
   FiHeart,
@@ -51,7 +52,7 @@ const Navbar = () => {
           <Link to="/" className="flex items-center space-x-3">
             <div className="relative">
               <img
-                src="/src/assets/logo/logos.png"
+                src={Logo}
                 alt="Logo"
                 className="h-14 w-auto object-contain"
                 style={{
