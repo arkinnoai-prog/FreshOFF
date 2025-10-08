@@ -142,11 +142,11 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
         {/* Left Section - Product Images */}
         <div className="relative z-10 w-1/2 p-8 flex flex-col justify-center">
           {/* Main Image */}
-          <div className="relative w-full h-116 rounded-2xl overflow-hidden mb-4">
+          <div className="relative w-full h-126 rounded-2xl overflow-hidden mb-4">
             <img
               src={bag.additionalImages?.[selectedImageIndex] || bag.image}
               alt={bag.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-125"
             />
             {/* Image overlay effects */}
             <div className="absolute inset-0">
@@ -175,7 +175,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ bag, onClose }) => {
                 <img
                   src={img}
                   alt={`${bag.name} view ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover scale-110"
                 />
                 {selectedImageIndex !== index && (
                   <div className="absolute inset-0 bg-black/30"></div>
