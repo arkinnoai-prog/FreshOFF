@@ -1,56 +1,116 @@
-// assets/outfit.js - Sample outfits with subcategories
 export const sampleOutfits = [
-  // Bags
+  // Box Clutch
   {
     id: "bag-1",
-    name: "Black Box Clutch",
+    name: "Midnight Black Box Clutch",
     url: "src/assets/bags/bag222.png",
     category: "bag",
     subCategory: "box-clutch",
   },
-
-  {
-    id: "bag-10",
-    name: "Mysterious Box Clutch",
-    url: "src/assets/bags/bag333.png",
-    category: "bag",
-    subCategory: "box-clutch",
-  },
-
   {
     id: "bag-2",
-    name: "Canvas Tote Bag",
-    url: "/src/assets/outfits/bags/tote-bag/t2.png",
-    category: "bag",
-    subCategory: "Satchel",
-  },
-
-  {
-    id: "bag-12",
-    name: "Pixel Tote Bag",
-    url: "/src/assets/outfits/bags/tote-bag/t3.png",
-    category: "bag",
-    subCategory: "Satchel",
-  },
-
-  {
-    id: "bag-4",
-    name: "Sport Fanny Pack",
-    url: "/src/assets/outfits/bags/fanny-pack/f1.png",
-    category: "bag",
-    subCategory: "fanny-pack",
-  },
-  {
-    id: "bag-5",
-    name: "Gold Evening Clutch",
+    name: "Golden Glow Evening Clutch",
     url: "src/assets/bags/bag111.png",
     category: "bag",
     subCategory: "box-clutch",
   },
   {
+    id: "bag-3",
+    name: "Mysterious Sapphire Clutch",
+    url: "src/assets/bags/bag333.png",
+    category: "bag",
+    subCategory: "box-clutch",
+  },
+  {
+    id: "bag-4",
+    name: "White Crystal Box Clutch",
+    url: "src/assets/bags/categories/c4.png",
+    category: "bag",
+    subCategory: "box-clutch",
+  },
+  {
+    id: "bag-5",
+    name: "Royal Blue Velvet Clutch",
+    url: "src/assets/bags/featured-products/blue1.png",
+    category: "bag",
+    subCategory: "box-clutch",
+  },
+
+  // Satchel / Tote Style Bags
+  {
     id: "bag-6",
-    name: "Beach Tote Bag",
-    url: "src/assets/bags/bag5.jpeg",
+    name: "Classic Canvas Tote",
+    url: "src/assets/outfits/bags/tote-bag/t2.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-7",
+    name: "Sunset Orange Satchel",
+    url: "src/assets/bags/featured-products/orange2.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-8",
+    name: "Rose Blush Satchel",
+    url: "src/assets/bags/featured-products/rose2.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-9",
+    name: "Ivory White Satchel",
+    url: "src/assets/bags/featured-products/white1.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-10",
+    name: "Emerald Green Satchel",
+    url: "src/assets/bags/bag555.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-11",
+    name: "Urban Gray Tote",
+    url: "src/assets/outfits/bags/tote-bag/t3.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-12",
+    name: "Tropical Beach Bag",
+    url: "src/assets/bags/categories/c1.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-13",
+    name: "Shiny Pearl Handbag",
+    url: "src/assets/bags/bag444.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-14",
+    name: "Soft Beige Tote",
+    url: "src/assets/bags/categories/c2.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-15",
+    name: "Elegant Black Leather Satchel",
+    url: "src/assets/bags/featured-products/black1.png",
+    category: "bag",
+    subCategory: "Satchel",
+  },
+  {
+    id: "bag-16",
+    name: "Golden Haze Satchel",
+    url: "src/assets/bags/categories/c3.png",
     category: "bag",
     subCategory: "Satchel",
   },

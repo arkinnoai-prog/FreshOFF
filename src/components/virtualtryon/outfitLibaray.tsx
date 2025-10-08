@@ -7,8 +7,7 @@ import {
   TrendingUp,
   Shirt,
   Package,
-  ChevronDown,
-  ArrowDown,
+  
 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { sampleOutfits } from "@/assets/outfit";
