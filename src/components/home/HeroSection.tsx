@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { ShinyButton } from "../ui/shiny-button";
 import logo from "../../assets/logo/logos.png";
+import video from "../../assets/hero/v1.mp4";
 
 const HeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -17,7 +18,7 @@ const HeroSection = () => {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="src/assets/hero/v1.mp4" type="video/mp4" />
+        <source src={video} type="video/mp4" />
       </video>
 
       <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
