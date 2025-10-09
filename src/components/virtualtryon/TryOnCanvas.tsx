@@ -576,7 +576,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
 
                       {/* Percentage Indicator */}
                       <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/90 text-white px-2 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-medium backdrop-blur-sm">
-                        {Math.round(100 - scanPosition)}% New Look
+                        {Math.round(scanPosition)}% New Look
                       </div>
                     </div>
 
