@@ -28,37 +28,33 @@ interface Outfit {
 
 interface TryOnCanvasProps {
   model: Model;
-
   onBack: () => void;
 }
 
 const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const canvasRef = useRef<any>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
+  const [selectedOutfit, setSelectedOutfit] = useState<Outfit | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
-  //   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
   const [pendingOutfit, setPendingOutfit] = useState<Outfit | null>(null);
   const [scanPosition, setScanPosition] = useState<number>(50);
   const [isScanning, setIsScanning] = useState<boolean>(false);
-  const [canvasDimensions, setCanvasDimensions] = useState<{
-    width: number;
-    height: number;
-  }>({ width: 0, height: 0 });
   const scannerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [showMobileOutfits, setShowMobileOutfits] = useState<boolean>(false);
 
-  const resultAspectRatio =
-    canvasDimensions.width > 0 && canvasDimensions.height > 0
-      ? `${canvasDimensions.width} / ${canvasDimensions.height}`
-      : undefined;
-
-  const resultMaxWidth =
-    canvasDimensions.width > 0
-      ? `${Math.round(canvasDimensions.width)}px`
-      : undefined;
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     let cleanup: (() => void) | undefined;
@@ -68,102 +64,61 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     }
 
     return () => {
-      // Properly dispose of the canvas on cleanup
       if (cleanup) {
         cleanup();
       }
     };
-  }, [model, showResult]);
+  }, [model, showResult, isMobile]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   const initializeCanvas = (): (() => void) => {
-    // Dispose of any existing canvas first
     if (fabricCanvasRef.current) {
       fabricCanvasRef.current.dispose();
       fabricCanvasRef.current = null;
     }
 
     const canvasContainer = document.getElementById("canvas-container");
-    const canvasElement = canvasRef.current;
-
-    if (!canvasContainer || !canvasElement) {
+    if (!canvasContainer || !canvasRef.current) {
       return () => {};
     }
 
-    const wrapperElement = canvasElement.parentElement as HTMLElement | null;
-    let availableWidth = canvasContainer.clientWidth;
+    const padding = isMobile ? 24 : 48;
+    const containerWidth = canvasContainer.offsetWidth - padding;
+    const aspectRatio = 3 / 4;
+    const maxHeight = isMobile
+      ? window.innerHeight * 0.5
+      : window.innerHeight * 0.7;
+    const canvasHeight = Math.min(containerWidth * aspectRatio, maxHeight);
+    const canvasWidth = canvasHeight / aspectRatio;
 
-    if (wrapperElement) {
-      const computedStyle = window.getComputedStyle(wrapperElement);
-      const horizontalPadding =
-        parseFloat(computedStyle.paddingLeft || "0") +
-        parseFloat(computedStyle.paddingRight || "0");
-      availableWidth = wrapperElement.clientWidth - horizontalPadding;
-    }
-
-    const MIN_CANVAS_SIZE = 280;
-    const DEFAULT_ASPECT_RATIO = 3 / 4;
-    const canvasWidth = Math.max(availableWidth, MIN_CANVAS_SIZE);
-    const provisionalHeight = canvasWidth * DEFAULT_ASPECT_RATIO;
-
-    // Check if canvas element already has a fabric instance
     const existingCanvas = (canvasRef.current as any).__canvas;
     if (existingCanvas) {
       existingCanvas.dispose();
     }
 
-    const canvas = new fabric.Canvas(canvasElement, {
+    const canvas = new fabric.Canvas(canvasRef.current, {
       width: canvasWidth,
-      height: provisionalHeight,
+      height: canvasHeight,
       backgroundColor: "#160B26",
     });
 
     fabricCanvasRef.current = canvas;
 
-    // Load model image
-    fabric.Image.fromURL(model.image_url, {
-      crossOrigin: "anonymous",
-    })
+    fabric.Image.fromURL(model.image_url)
       .then((img) => {
-        // Check if canvas still exists (component might have unmounted)
         if (!fabricCanvasRef.current) return;
 
-        const imgWidth = img.width || canvasWidth;
-        const imgHeight = img.height || provisionalHeight;
-
-        const containerRect = canvasContainer.getBoundingClientRect();
-        const availableHeight = Math.max(
-          window.innerHeight - containerRect.top - 160,
-          MIN_CANVAS_SIZE
-        );
-        const maxHeight = Math.max(availableHeight, provisionalHeight);
         const scale = Math.min(
-          canvasWidth / imgWidth,
-          maxHeight / imgHeight,
-          1
+          (canvasWidth * 0.9) / (img.width || 1),
+          (canvasHeight * 0.9) / (img.height || 1)
         );
-
-        const scaledWidth = imgWidth * scale;
-        const scaledHeight = imgHeight * scale;
-
-        fabricCanvasRef.current.setDimensions(
-          {
-            width: scaledWidth,
-            height: scaledHeight,
-          },
-          {
-            backstoreOnly: false,
-          }
-        );
-
-        setCanvasDimensions({ width: scaledWidth, height: scaledHeight });
 
         img.set({
-          left: scaledWidth / 2,
-          top: scaledHeight / 2,
+          left: canvasWidth / 2,
+          top: canvasHeight / 2,
           originX: "center",
           originY: "center",
           scaleX: scale,
@@ -179,7 +134,6 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
         console.error("Error loading model image:", error);
       });
 
-    // Return cleanup function
     return () => {
       if (fabricCanvasRef.current) {
         fabricCanvasRef.current.dispose();
@@ -212,6 +166,9 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const confirmAndApply = (outfit: Outfit): void => {
     setPendingOutfit(outfit);
     setShowConfirmDialog(true);
+    if (isMobile) {
+      setShowMobileOutfits(false);
+    }
   };
 
   const handleConfirmApply = async (): Promise<void> => {
@@ -231,6 +188,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     if (!outfit) return;
 
     setIsProcessing(true);
+    setSelectedOutfit(outfit);
 
     try {
       const imageFile = await prepareImageFile(outfit);
@@ -240,14 +198,13 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
 
       const result = await modelsApi.tryOnOutfit(formData);
 
-      // Show result in same canvas area
       const imageUrl = result.image_base64
         ? `data:${result.content_type};base64,${result.image_base64}`
         : result.image_url || result;
 
       setResultImage(imageUrl);
       setShowResult(true);
-      setScanPosition(50); // Reset scan position
+      setScanPosition(50);
     } catch (error) {
       console.error("Try-on failed:", error);
     } finally {
@@ -258,6 +215,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
   const handleBackToEdit = (): void => {
     setShowResult(false);
     setResultImage(null);
+    setSelectedOutfit(null);
     setScanPosition(50);
     setIsScanning(false);
   };
@@ -270,20 +228,6 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
       link.click();
     }
   };
-
-  //   const handleShare = async (): Promise<void> => {
-  //     if (navigator.share && resultImage) {
-  //       try {
-  //         await navigator.share({
-  //           title: "My Virtual Try-On",
-  //           text: "Check out my virtual try-on result!",
-  //           url: window.location.href,
-  //         });
-  //       } catch (err) {
-  //         console.log("Share failed:", err);
-  //       }
-  //     }
-  //   };
 
   const handleOutfitSelect = (outfit: Outfit): void => {
     confirmAndApply(outfit);
@@ -310,7 +254,6 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     const y = e.clientY - rect.top;
     const modelTop = rect.height * 0.3;
 
-    // Only allow drop if not over model area
     if (y > modelTop) {
       e.dataTransfer.dropEffect = "copy";
       setIsDragging(true);
@@ -320,35 +263,40 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     }
   };
 
-  // Handle scanning interaction
-  const handleScannerMouseDown = (): void => {
+  const handleScanStart = (e: React.MouseEvent | React.TouchEvent): void => {
+    e.preventDefault();
     setIsScanning(true);
   };
 
-  const handleScannerMouseMove = (e: MouseEvent): void => {
+  const handleScanMove = (e: MouseEvent | TouchEvent): void => {
     if (!isScanning || !scannerRef.current) return;
 
     const rect = scannerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const x = clientX - rect.left;
     const percentage = (x / rect.width) * 100;
     setScanPosition(Math.min(Math.max(percentage, 0), 100));
   };
 
-  const handleScannerMouseUp = (): void => {
+  const handleScanEnd = (): void => {
     setIsScanning(false);
   };
 
   useEffect(() => {
     if (isScanning) {
-      const handleMove = (e: MouseEvent) => handleScannerMouseMove(e);
-      const handleUp = () => handleScannerMouseUp();
+      const handleMove = (e: MouseEvent | TouchEvent) => handleScanMove(e);
+      const handleEnd = () => handleScanEnd();
 
       document.addEventListener("mousemove", handleMove);
-      document.addEventListener("mouseup", handleUp);
+      document.addEventListener("mouseup", handleEnd);
+      document.addEventListener("touchmove", handleMove);
+      document.addEventListener("touchend", handleEnd);
 
       return () => {
         document.removeEventListener("mousemove", handleMove);
-        document.removeEventListener("mouseup", handleUp);
+        document.removeEventListener("mouseup", handleEnd);
+        document.removeEventListener("touchmove", handleMove);
+        document.removeEventListener("touchend", handleEnd);
       };
     }
   }, [isScanning]);
@@ -359,45 +307,53 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
       <motion.header
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className=" bg-[#150027] backdrop-blur-md border-b border-violet-900/30 flex-shrink-0 z-20 mt-20"
+        className="bg-[#150027] backdrop-blur-md border-b border-violet-900/30 flex-shrink-0 z-100 mt-1 lg:mt-[-20px] md:mt-20"
       >
-        <div className="max-w-7xl mx-auto px-6 py-3">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3 pt-14">
               <button
                 onClick={onBack}
-                className="p-2 hover:bg-slate-800 rounded-xl transition-colors"
+                className="p-1.5 md:p-2 hover:bg-slate-800 rounded-xl transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-300" />
+                <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 text-gray-300" />
               </button>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-r from-violet-500 to-purple-500 rounded-xl">
-                  <Sparkles className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="p-1.5 md:p-2 bg-gradient-to-r from-violet-500 to-purple-500 rounded-xl">
+                  <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                  <h1 className="text-base md:text-xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
                     Virtual Fitting Room
                   </h1>
                   <p className="text-xs text-gray-400">Model #{model.id}</p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {showResult && (
+            <div className="flex items-center gap-2 lg:mt-17">
+              {showResult && !isMobile && (
                 <>
                   <button
                     onClick={handleBackToEdit}
-                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
+                    className="px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
                   >
                     Edit Again
                   </button>
                   <button
                     onClick={onBack}
-                    className="px-4 py-2 text-sm font-medium text-gray-200 bg-slate-700 hover:bg-slate-600 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                    className="px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium text-gray-200 bg-slate-700 hover:bg-slate-600 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
                   >
                     Change Model
                   </button>
                 </>
+              )}
+              {isMobile && !showResult && (
+                <button
+                  onClick={() => setShowMobileOutfits(true)}
+                  className="px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl mt-14"
+                >
+                  Select Outfit
+                </button>
               )}
             </div>
           </div>
@@ -405,10 +361,18 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
       </motion.header>
 
       <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-7xl mx-auto px-6 py-6">
-          <div className="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="h-full max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-3">
+          <div
+            className={`h-full ${
+              isMobile ? "" : "grid grid-cols-1 lg:grid-cols-3 gap-6"
+            }`}
+          >
             {/* Canvas Area */}
-            <div className="lg:col-span-2 h-full overflow-auto">
+            <div
+              className={`${
+                isMobile ? "h-full" : "lg:col-span-2 h-full"
+              } overflow-auto`}
+            >
               <motion.div
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
@@ -416,7 +380,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                   background:
                     "linear-gradient(135deg, #0F0A1F, #160B26, #1A0B30)",
                 }}
-                className=" backdrop-blur-md border border-violet-900/30 rounded-2xl shadow-xl overflow-hidden h-fit"
+                className="backdrop-blur-md border border-violet-900/30 rounded-2xl shadow-xl overflow-hidden h-fit lg:mt-0 mt-20 "
                 id="canvas-container"
               >
                 {!showResult ? (
@@ -426,17 +390,19 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                         background:
                           "linear-gradient(to bottom, #0D0619, #160B26, #1F1333)",
                       }}
-                      className="p-6  border-b border-violet-900/30"
+                      className="p-4 md:p-6 border-b border-violet-900/30"
                     >
                       <div className="flex items-center justify-center">
-                        <h3 className="font-semibold text-gray-200">
-                          Drag & Drop to Try On
+                        <h3 className="font-semibold text-gray-200 text-sm md:text-base">
+                          {isMobile
+                            ? "Select outfit to try on"
+                            : "Drag & Drop to Try On"}
                         </h3>
                       </div>
                     </div>
 
                     <div
-                      className="relative bg-gradient-to-b from-slate-800 to-slate-900 p-6"
+                      className="relative bg-gradient-to-b from-slate-800 to-slate-900 p-3 md:p-6"
                       onDragOver={handleDragOver}
                       onDragEnter={(e) => e.preventDefault()}
                       onDragLeave={(e) => {
@@ -460,21 +426,21 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-6 pointer-events-none"
+                            className="absolute inset-3 md:inset-6 pointer-events-none"
                           >
                             <div className="h-full border-4 border-dashed border-violet-400 rounded-xl bg-violet-900/30 flex items-center justify-center">
                               <motion.div
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ repeat: Infinity, duration: 2 }}
-                                className="text-center bg-slate-800 p-6 rounded-2xl shadow-xl"
+                                className="text-center bg-slate-800 p-4 md:p-6 rounded-2xl shadow-xl"
                               >
-                                <div className="w-16 h-16 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                                  <Wand2 className="w-8 h-8 text-white" />
+                                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                                  <Wand2 className="w-6 h-6 md:w-8 md:h-8 text-white" />
                                 </div>
-                                <p className="text-lg font-semibold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                                <p className="text-sm md:text-lg font-semibold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
                                   Release to Try On!
                                 </p>
-                                <p className="text-sm text-gray-400 mt-1">
+                                <p className="text-xs md:text-sm text-gray-400 mt-1">
                                   AI will process automatically
                                 </p>
                               </motion.div>
@@ -501,14 +467,14 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                                 }}
                                 className="inline-block mb-4"
                               >
-                                <div className="w-20 h-20 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center">
-                                  <Sparkles className="w-10 h-10 text-white" />
+                                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center">
+                                  <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-white" />
                                 </div>
                               </motion.div>
-                              <p className="text-xl font-semibold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                              <p className="text-lg md:text-xl font-semibold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
                                 Creating Your Look
                               </p>
-                              <p className="text-gray-400 text-sm mt-2">
+                              <p className="text-gray-400 text-xs md:text-sm mt-2">
                                 AI is processing your try-on...
                               </p>
                             </div>
@@ -521,57 +487,62 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-6"
+                    className="p-4 md:p-6"
                   >
-                    <div className="mb-4 text-center">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                    <div className="mb-3 text-center">
+                      <h3 className="text-lg md:text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent mb-1">
                         Your Virtual Try-On Result
                       </h3>
-                      <p className="text-gray-400 flex items-center justify-center gap-2">
-                        <ScanLine className="w-4 h-4" />
-                        Drag to compare before & after
+                      <p className="text-gray-400 flex items-center justify-center gap-2 text-xs md:text-base">
+                        <ScanLine className="w-3 h-3 md:w-4 md:h-4" />
+                        {isMobile
+                          ? "Touch and drag to compare"
+                          : "Drag to compare before & after"}
                       </p>
                     </div>
 
                     <div
                       ref={scannerRef}
-                      className="relative w-full mx-auto rounded-xl overflow-hidden bg-gradient-to-b from-slate-800 to-slate-900 p-4 cursor-ew-resize"
-                      style={{
-                        aspectRatio: resultAspectRatio ?? "3 / 4",
-                        maxWidth: resultMaxWidth,
-                      }}
-                      onMouseDown={handleScannerMouseDown}
+                      className="relative rounded-xl overflow-hidden bg-gradient-to-b from-slate-800 to-slate-900 cursor-ew-resize"
+                      onMouseDown={handleScanStart}
+                      onTouchStart={handleScanStart}
                     >
                       <div
-                        className="relative w-full h-full rounded-lg overflow-hidden"
+                        className="relative rounded-lg overflow-hidden"
                         style={{ userSelect: "none" }}
                       >
-                        {/* Original Image (Before) */}
-                        <img
-                          src={model.image_url}
-                          alt="Original"
-                          className="w-full h-full object-contain"
-                          draggable={false}
-                        />
-
-                        {/* Result Image (After) - Clipped */}
+                        {/* Container to maintain aspect ratio */}
                         <div
-                          className="absolute inset-0 overflow-hidden"
-                          style={{
-                            clipPath: `inset(0 ${100 - scanPosition}% 0 0)`,
-                          }}
+                          className="relative w-full"
+                          style={{ paddingBottom: "133.33%" }}
                         >
+                          {/* Original Image (Before) */}
                           <img
-                            src={resultImage!}
-                            alt="Try-on result"
-                            className="w-full h-full object-contain"
+                            src={model.image_url}
+                            alt="Original"
+                            className="absolute inset-0 w-full h-full object-contain bg-slate-900 rounded-lg"
                             draggable={false}
                           />
+
+                          {/* Result Image (After) - Clipped */}
+                          <div
+                            className="absolute inset-0 overflow-hidden"
+                            style={{
+                              clipPath: `inset(0 ${100 - scanPosition}% 0 0)`,
+                            }}
+                          >
+                            <img
+                              src={resultImage!}
+                              alt="Try-on result"
+                              className="absolute inset-0 w-full h-full object-contain bg-slate-900 rounded-lg"
+                              draggable={false}
+                            />
+                          </div>
                         </div>
 
                         {/* Scanner Line */}
                         <div
-                          className="absolute top-0 bottom-0 w-1 bg-gradient-to-r from-violet-500 to-purple-500 shadow-xl"
+                          className="absolute top-0 bottom-0 w-0.5 md:w-1 bg-gradient-to-r from-violet-500 to-purple-500 shadow-xl"
                           style={{
                             left: `${scanPosition}%`,
                             transform: "translateX(-50%)",
@@ -581,43 +552,43 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                             <motion.div
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{ repeat: Infinity, duration: 2 }}
-                              className="w-10 h-10 bg-slate-800 rounded-full shadow-lg border-2 border-violet-500 flex items-center justify-center"
+                              className="w-8 h-8 md:w-10 md:h-10 bg-slate-800 rounded-full shadow-lg border-2 border-violet-500 flex items-center justify-center"
                             >
-                              <Eye className="w-5 h-5 text-violet-400" />
+                              <Eye className="w-4 h-4 md:w-5 md:h-5 text-violet-400" />
                             </motion.div>
                           </div>
 
                           {/* Labels */}
-                          <div className="absolute -left-12 top-4 bg-slate-800/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-medium text-gray-300 shadow-md">
+                          <div className="absolute -left-10 md:-left-12 top-4 bg-slate-800/90 backdrop-blur-sm px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium text-gray-300 shadow-md">
                             Before
                           </div>
-                          <div className="absolute -right-10 top-4 bg-gradient-to-r from-violet-500 to-purple-500 text-white px-2 py-1 rounded text-xs font-medium shadow-md">
+                          <div className="absolute -right-8 md:-right-10 top-4 bg-gradient-to-r from-violet-500 to-purple-500 text-white px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium shadow-md">
                             After
                           </div>
                         </div>
                       </div>
 
                       {/* Percentage Indicator */}
-                      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/90 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
+                      <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/90 text-white px-2 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-medium backdrop-blur-sm">
                         {Math.round(scanPosition)}% New Look
                       </div>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="mt-6 flex flex-wrap gap-3 justify-center">
+                    <div className="mt-4 md:mt-6 flex flex-wrap gap-2 md:gap-3 justify-center">
                       <button
                         onClick={handleDownload}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-xl hover:shadow-lg transform hover:scale-105 transition-all"
+                        className="flex items-center gap-1.5 md:gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-xl hover:shadow-lg transform hover:scale-105 transition-all text-xs md:text-base"
                       >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-3 h-3 md:w-4 md:h-4" />
                         Download
                       </button>
 
                       <button
                         onClick={handleBackToEdit}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-slate-700 text-gray-300 rounded-xl hover:bg-slate-600 transition-all"
+                        className="flex items-center gap-1.5 md:gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-slate-700 text-gray-300 rounded-xl hover:bg-slate-600 transition-all text-xs md:text-base"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <RotateCcw className="w-3 h-3 md:w-4 md:h-4" />
                         Try Another
                       </button>
                     </div>
@@ -626,21 +597,58 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
               </motion.div>
             </div>
 
-            {/* Outfit Library - Fixed Height */}
-            <motion.div
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="lg:col-span-1 h-full min-h-0"
-            >
-              <OutfitLibrary
-                onSelectOutfit={handleOutfitSelect}
-                onUploadOutfit={handleOutfitSelect}
-              />
-            </motion.div>
+            {/* Desktop Outfit Library */}
+            {!isMobile && (
+              <motion.div
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="lg:col-span-1 h-full min-h-0"
+              >
+                <OutfitLibrary
+                  onSelectOutfit={handleOutfitSelect}
+                  onUploadOutfit={handleOutfitSelect}
+                />
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Mobile Outfit Drawer */}
+      <AnimatePresence>
+        {isMobile && showMobileOutfits && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            onClick={() => setShowMobileOutfits(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="absolute bottom-0 left-0 right-0 bg-slate-800 rounded-t-3xl max-h-[80vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-slate-700">
+                <div className="w-12 h-1 bg-slate-600 rounded-full mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-white text-center">
+                  Select Outfit
+                </h3>
+              </div>
+              <div className="overflow-auto max-h-[calc(80vh-80px)]">
+                <OutfitLibrary
+                  onSelectOutfit={handleOutfitSelect}
+                  onUploadOutfit={handleOutfitSelect}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Confirmation Dialog */}
       <AnimatePresence>
@@ -656,49 +664,49 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800 rounded-2xl shadow-2xl p-6 max-w-md w-full"
+              className="bg-slate-800 rounded-2xl shadow-2xl p-4 md:p-6 max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Sparkles className="w-8 h-8 text-white" />
+              <div className="text-center mb-4 md:mb-6">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-100 mb-2">
+                <h3 className="text-lg md:text-xl font-bold text-gray-100 mb-1 md:mb-2">
                   Ready to Try On?
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-gray-400 text-xs md:text-base">
                   AI will process this outfit on your selected model
                 </p>
               </div>
 
               {pendingOutfit && (
-                <div className="mb-6 p-3 bg-slate-700 rounded-xl flex items-center gap-3">
+                <div className="mb-4 md:mb-6 p-2.5 md:p-3 bg-slate-700 rounded-xl flex items-center gap-2 md:gap-3">
                   <img
                     src={pendingOutfit.url}
                     alt={pendingOutfit.name}
-                    className="w-16 h-20 object-contain bg-slate-600 rounded-lg"
+                    className="w-12 h-16 md:w-16 md:h-20 object-contain bg-slate-600 rounded-lg"
                   />
                   <div className="flex-1">
-                    <p className="font-medium text-gray-200 text-sm">
+                    <p className="font-medium text-gray-200 text-xs md:text-sm">
                       {pendingOutfit.name}
                     </p>
-                    <p className="text-xs text-gray-400 capitalize">
+                    <p className="text-[10px] md:text-xs text-gray-400 capitalize">
                       {pendingOutfit.category || "Custom"}
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="flex gap-3">
+              <div className="flex gap-2 md:gap-3">
                 <button
                   onClick={handleCancelApply}
-                  className="flex-1 px-4 py-2.5 bg-slate-700 text-gray-300 rounded-xl hover:bg-slate-600 transition-all font-medium"
+                  className="flex-1 px-3 md:px-4 py-2 md:py-2.5 bg-slate-700 text-gray-300 rounded-xl hover:bg-slate-600 transition-all font-medium text-sm md:text-base"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirmApply}
-                  className="flex-1 px-4 py-2.5 bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-xl hover:shadow-lg transition-all font-medium"
+                  className="flex-1 px-3 md:px-4 py-2 md:py-2.5 bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-xl hover:shadow-lg transition-all font-medium text-sm md:text-base"
                 >
                   Apply Try-On
                 </button>

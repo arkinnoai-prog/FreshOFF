@@ -139,7 +139,7 @@ Handle Drop: 2.5 inches / 6.35 cm
   },
   {
     id: 4,
-    name: "Hermès White Matte Niloticus New Model",
+    name: "Hermès White Matte Niloticus",
     title: "Palladium Hardware, 2022",
     image: bag44,
     bgColor: "from-red-900 to-purple-600",
@@ -170,7 +170,7 @@ Handle Drop: 3.74 inches / 9.5 cm
   },
   {
     id: 5,
-    name: "Hermès White Matte Niloticus green  30",
+    name: "Hermès White Matte  green",
     title: "Palladium Hardware, 2022 (Color Variant)",
     image: bag55,
     bgColor: "from-purple-800 to-pink-700",
