@@ -191,6 +191,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
     setSelectedOutfit(outfit);
 
     try {
+      console.log(selectedOutfit);
       const imageFile = await prepareImageFile(outfit);
       const formData = new FormData();
       formData.append("model_id", model.id.toString());

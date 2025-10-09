@@ -74,7 +74,6 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
       onSelectModel(model);
     }, 600);
   };
-  console.log(showTips, "showTips");
 
   const handleFileSelect = (e: ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
@@ -85,6 +84,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
       setUploadError("Please select a valid image file");
     }
   };
+  console.log(showTips);
 
   const handleUploadSubmit = async (): Promise<void> => {
     if (!uploadForm.name || !uploadForm.gender || !uploadForm.image) {
@@ -404,8 +404,6 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
 
                               {/* Gender Badge */}
                               <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                     
-
                                 {/* Size Badge */}
                                 {model.size && (
                                   <motion.div
