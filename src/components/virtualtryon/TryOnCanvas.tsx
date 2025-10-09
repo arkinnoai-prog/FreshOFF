@@ -558,12 +558,17 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
                               <Eye className="w-4 h-4 md:w-5 md:h-5 text-violet-400" />
                             </motion.div>
                           </div>
-
                           {/* Labels */}
-                          <div className="absolute -left-10 md:-left-12 top-4 bg-slate-800/90 backdrop-blur-sm px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium text-gray-300 shadow-md">
+                          <div className="absolute -right-10 md:-right-12 top-4 bg-slate-800/90 backdrop-blur-sm px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium text-gray-300 shadow-md">
                             Before
                           </div>
-                          <div className="absolute -right-8 md:-right-10 top-4 bg-gradient-to-r from-violet-500 to-purple-500 text-white px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium shadow-md">
+
+                          <div
+                            className="absolute -left-8 md:-left-10 top-4
+  bg-gradient-to-r from-violet-500 to-purple-500
+  text-white px-1.5 md:px-2 py-0.5 md:py-1 rounded
+  text-[10px] md:text-xs font-medium shadow-md"
+                          >
                             After
                           </div>
                         </div>
@@ -571,7 +576,7 @@ const TryOnCanvas: React.FC<TryOnCanvasProps> = ({ model, onBack }) => {
 
                       {/* Percentage Indicator */}
                       <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/90 text-white px-2 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-medium backdrop-blur-sm">
-                        {Math.round(scanPosition)}% New Look
+                        {Math.round(100 - scanPosition)}% New Look
                       </div>
                     </div>
 
